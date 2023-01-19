@@ -4,4 +4,5 @@
 ## Compiler Name - roflCC (The rofl Compiler Collection)
 | Language Feature | Code Example |
 | ---------------- | ------------ |
-| Integer Scalar Variables | :1234: x, :1234: y, :1234: z
+| Integer Scalar Variables | :1234: x; :1234: y; :1234: z, avg;
+| One-dimensional arrays of integers | 📇 🔢 8️⃣ arrayOfIntegersWithSizeEight; 📇 🔢 5️⃣ arrayOfIntegersWithSizeFive; |
