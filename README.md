@@ -4,3 +4,4 @@
 ## Compiler Name - roflCC (The rofl Compiler Collection)
 | Language Feature | Code Example |
 | ---------------- | ------------ |
+| Integer Scalar Variables | :1234: x, :1234: y, :1234: z
