@@ -20,6 +20,7 @@
 ##Whitespaces - Whitespaces are ignored
 
 | Symbol In Language | Token Name |
+| ------------------ | ---------- |
 | 🔢 | INTEGER |
 | 🔡 | STRING |
 | 📇 | ARRAY |
