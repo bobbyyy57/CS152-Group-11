@@ -33,6 +33,7 @@
 | `:seven:` | 7️⃣ | SEVEN |
 | `:eight:` | 8️⃣ | EIGHT |
 | `:nine:` | 9️⃣ | NINE |
+| `:symbols:` | 🔣 | FUNCTION |
 | `:heavy_plus_sign:` | ➕ | PLUS |
 | `:heavy_minus_sign:` | ➖ | MINUS |
 | `:heavy_multiplication_x:` | ✖️ | MULTIPLICATION |
