@@ -24,3 +24,10 @@
 | 🔢 | INTEGER |
 | 🔡 | STRING |
 | 📇 | ARRAY |
+
+
+| Symbol In Language | Token Name |
+| ------------------ | ---------- |
+| 🔢 | INTEGER |
+| 🔡 | STRING |
+| 📇 | ARRAY |
