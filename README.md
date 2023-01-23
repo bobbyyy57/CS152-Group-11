@@ -49,6 +49,8 @@
 | `:desktop_computer:` | 🖥️ | READ |
 | `{` | { | LEFT_CURLY |
 | `}` | } | RIGHT_CURLY |
+| `[` | [ | LEFT_SQUARE |
+| `]` | ] | RIGHT_SQUARE |
 | `(` | ( | LEFT_PARENTHESIS |
 | `)` | ) | RIGHT_PARENTHESIS |
 | `:` | : | COLON |
