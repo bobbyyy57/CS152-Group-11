@@ -24,4 +24,5 @@
 | `:1234:` | 🔢 | INTEGER |
 | `:abcd:` | 🔡 | STRING |
 | `:card_index:` | 📇 | ARRAY |
+| `:one:` | :one: | ONE |
 
