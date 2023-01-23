@@ -55,4 +55,5 @@
 | `(` | ( | LEFT_PARENTHESIS |
 | `)` | ) | RIGHT_PARENTHESIS |
 | `:` | : | COLON |
+| `;` | ; | SEMICOLON |
 
