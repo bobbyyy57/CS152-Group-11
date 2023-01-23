@@ -33,4 +33,11 @@
 | `:seven:` | 7️⃣ | SEVEN |
 | `:eight:` | 8️⃣ | EIGHT |
 | `:nine:` | 9️⃣ | NINE |
+| `:heavy_plus_sign:` | ➕ | PLUS |
+| `:heavy_minus_sign:` | ➖ | MINUS |
+| `:heavy_multiplication_x:` | ✖️ | MULTIPLICATION |
+| `:heavy_division_sign:` | ➗ | DIVISION |
+| `:heavy_equals_sign:` | :heavy_equals_sign: | EQUAL |
+| `:arrow_forward:` | ▶️ | GREATER_THAN |
+| `:arrow_backward:` | ◀️ | LESS_THAN |
 
