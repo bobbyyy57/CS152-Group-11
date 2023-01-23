@@ -2,13 +2,13 @@
 ## Name - :rofl:
 ## Extension For Files - .rofl
 ## Compiler Name - roflCC (The rofl Compiler Collection)
-| Language Feature | Code Example |
-| ---------------- | ------------ |
+| Language Feature | Code Example |Markdown Example |
+| ---------------- | ------------ | --------------- |
 | Integer Scalar Variables | :1234: x; :1234: y; :1234: z, avg;
 | One-dimensional arrays of integers | 📇 🔢 8️⃣ arrayOfIntegersWithSizeEight; 📇 🔢 5️⃣ arrayOfIntegersWithSizeFive; |
 | Assignment Statements | x 👉 8; y 👉 7; |
 | Arithmetic Operators | x ➕ y; x ➖ y; x ✖️ y; x ➗ y;|
-| Relational Operators | x▶️y (x greater than y) ; x ◀️ y (x less than y) ; x 👉 👉 y (x equals y) ; x ❗ 👉 y (x does not equal y) ; | 
+| Relational Operators | x▶️y (x greater than y) ; x ◀️ y (x less than y) ; x 👉 👉 y (x equals y) ; x ❗👉 y (x does not equal y) ; | 
 | While or Do-While Loops | 🔁[x ◀️ 8] : (do while x is less than 8); | 
 | If-then-else statements | 🚦 [x ◀️ 5] {} (if x is less than five) 🚥 [x ◀️ 7] {} (else if x is less than 7) 🚦 {} (else) |
 | Read and write statements | 🖥️ x (print x); ⌨️ (Read following variable); |
