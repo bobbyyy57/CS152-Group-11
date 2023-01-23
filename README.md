@@ -12,7 +12,7 @@
 | While or Do-While Loops | |  🔁[x ◀️ 8] : (do while x is less than 8); | 
 | If-then-else statements | |🚦 [x ◀️ 5] {} (if x is less than five) 🚥 [x ◀️ 7] {} (else if x is less than 7) 🚦 {} (else) |
 | Read and write statements | | 🖥️ x (print x); ⌨️ (Read following variable); |
-| Comments | (comment goes here) | |
+| Comments | (comment goes here) | (comment goes here) |
 | Functions | | 🔢🔣[ 🔢x 🔢y] { (code) }  (function that takes in two ints and returns an int) (function symbol is 🔣) |
 
 ##Valid Identifier - Variable names can't contain a ":", as this is used to denote the start and end of a token
