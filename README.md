@@ -25,4 +25,12 @@
 | `:abcd:` | 🔡 | STRING |
 | `:card_index:` | 📇 | ARRAY |
 | `:one:` | :one: | ONE |
+| `:two:` | 2️⃣ | TWO |
+| `:three:` | 3️⃣ | THREE |
+| `:four:` | 4️⃣ | FOUR |
+| `:five:` | 5️⃣ | FIVE |
+| `:six:` | 6️⃣ | SIX |
+| `:seven:` | 7️⃣ | SEVEN |
+| `:eight:` | 8️⃣ | EIGHT |
+| `:nine:` | 9️⃣ | NINE |
 
