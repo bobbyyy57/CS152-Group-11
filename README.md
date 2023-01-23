@@ -22,6 +22,6 @@
 | Code | Symbol In Language | Token Name |
 | ---- | ------------------ | ---------- |
 | `:1234:` | 🔢 | INTEGER |
-| 🔡 | STRING |
+| `:abcd:` | 🔡 | STRING |
 | 📇 | ARRAY |
 
