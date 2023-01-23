@@ -6,9 +6,9 @@
 | ---------------- | ------------ |
 | Integer Scalar Variables | :1234: x; :1234: y; :1234: z, avg;
 | One-dimensional arrays of integers | 📇 🔢 8️⃣ arrayOfIntegersWithSizeEight; 📇 🔢 5️⃣ arrayOfIntegersWithSizeFive; |
-| Assignment Statements | x :heavy_equals_sign: 8; y :heavy_equals_sign: 7; |
+| Assignment Statements | x 👉 8; y 👉 7; |
 | Arithmetic Operators | x ➕ y; x ➖ y; x ✖️ y; x ➗ y;|
-| Relational Operators | x▶️y (x greater than y) ; x ◀️ y (x less than y) ; x :heavy_equals_sign: :heavy_equals_sign: y (x equals y) ; x ❗ :heavy_equals_sign: y (x does not equal y) ; | 
+| Relational Operators | x▶️y (x greater than y) ; x ◀️ y (x less than y) ; x 👉 👉 y (x equals y) ; x ❗ 👉 y (x does not equal y) ; | 
 | While or Do-While Loops | 🔁[x ◀️ 8] : (do while x is less than 8); | 
 | If-then-else statements | 🚦 [x ◀️ 5] {} (if x is less than five) 🚥 [x ◀️ 7] {} (else if x is less than 7) 🚦 {} (else) |
 | Read and write statements | 🖥️ x (print x); ⌨️ (Read following variable); |
@@ -38,7 +38,7 @@
 | `:heavy_minus_sign:` | ➖ | MINUS |
 | `:heavy_multiplication_x:` | ✖️ | MULTIPLICATION |
 | `:heavy_division_sign:` | ➗ | DIVISION |
-| `:heavy_equals_sign:` | :heavy_equals_sign: | EQUAL |
+| `:point_right` | 👉 | EQUAL |
 | `:arrow_forward:` | ▶️ | GREATER_THAN |
 | `:arrow_backward:` | ◀️ | LESS_THAN |
 | `:exclamation:` | ❗ | NOT |
