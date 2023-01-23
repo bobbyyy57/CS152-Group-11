@@ -19,15 +19,9 @@
 ##Case Sensitive - Language not case sensitive
 ##Whitespaces - Whitespaces are ignored
 
-| Symbol In Language | Token Name |
-| ------------------ | ---------- |
-| 🔢 | INTEGER |
+| Code | Symbol In Language | Token Name |
+| ---- | ------------------ | ---------- |
+| <:1234:> | 🔢 | INTEGER |
 | 🔡 | STRING |
 | 📇 | ARRAY |
 
-
-| Symbol In Language | Token Name |
-| ------------------ | ---------- |
-| 🔢 | INTEGER |
-| 🔡 | STRING |
-| 📇 | ARRAY |
