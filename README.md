@@ -40,4 +40,16 @@
 | `:heavy_equals_sign:` | :heavy_equals_sign: | EQUAL |
 | `:arrow_forward:` | ▶️ | GREATER_THAN |
 | `:arrow_backward:` | ◀️ | LESS_THAN |
+| `:exclamation:` | ❗ | NOT |
+| `:repeat:` | 🔁 | WHILE |
+| `:vertical_traffic_light:` | 🚦 | IF |
+| `:traffic_light:` | 🚥 | ELSE |
+| `:desktop_computer:` | 🖥️ | READ |
+| `:keyboard:` | ⌨️ | WRITE |
+| `:desktop_computer:` | 🖥️ | READ |
+| `{` | { | LEFT_CURLY |
+| `}` | } | RIGHT_CURLY |
+| `(` | ( | LEFT_PARENTHESIS |
+| `)` | ) | RIGHT_PARENTHESIS |
+| `:` | : | COLON |
 
