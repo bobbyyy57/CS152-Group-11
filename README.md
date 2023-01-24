@@ -7,7 +7,7 @@
 | Integer Scalar Variables | `:1234:` x; `:1234:` y; `:1234:` z, avg; |:1234: x; :1234: y; :1234: z, avg;
 | One-dimensional arrays of integers | `:card_index:` `:1234:` `:five:` arrayOfIntegersWithSizeEight; <br />`:card_index:` `:1234:` `:five:` arrayOfIntegersWithSizeFive; | 📇 🔢 8️⃣ arrayOfIntegersWithSizeEight; <br /> 📇 🔢 5️⃣ arrayOfIntegersWithSizeFive; |
 | Assignment Statements | x `:point_right:` 8; <br /> y `:point_right:` 7; |x 👉 8; <br /> y 👉 7; |
-| Arithmetic Operators | | x ➕ y; x ➖ y; x ✖️ y; x ➗ y;|
+| Arithmetic Operators | x `:heavy_plus_sign:` y; <br /> x `:heavy_minus_sign:` y; <br /> x `:heavy_multiplication_x:` y; <br /> x `:heavy_division_sign:` y; | x ➕ y; <br /> x ➖ y; <br /> x ✖️ y; <br /> x ➗ y;|
 | Relational Operators | | x▶️y (x greater than y) ; x ◀️ y (x less than y) ; x 👉 👉 y (x equals y) ; x ❗👉 y (x does not equal y) ; | 
 | While or Do-While Loops | |  🔁[x ◀️ 8] : (do while x is less than 8); | 
 | If-then-else statements | |🚦 [x ◀️ 5] {} (if x is less than five) 🚥 [x ◀️ 7] {} (else if x is less than 7) 🚦 {} (else) |
