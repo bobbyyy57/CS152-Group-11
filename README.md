@@ -4,7 +4,7 @@
 ## Compiler Name - roflCC (The rofl Compiler Collection)
 | Language Feature | Code Example |Markdown Example |
 | ---------------- | ------------ | --------------- |
-| Integer Scalar Variables | |:1234: x; :1234: y; :1234: z, avg;
+| Integer Scalar Variables | `:1234:` x; `:1234:` y; `:1234:` z, avg; |:1234: x; :1234: y; :1234: z, avg;
 | One-dimensional arrays of integers | | 📇 🔢 8️⃣ arrayOfIntegersWithSizeEight; 📇 🔢 5️⃣ arrayOfIntegersWithSizeFive; |
 | Assignment Statements | |x 👉 8; y 👉 7; |
 | Arithmetic Operators | | x ➕ y; x ➖ y; x ✖️ y; x ➗ y;|
