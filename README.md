@@ -5,7 +5,7 @@
 | Language Feature | Code Example |Markdown Example |
 | ---------------- | ------------ | --------------- |
 | Integer Scalar Variables | `:1234:` x; <br /> `:1234:` y; <br /> `:1234:` z, avg; |:1234: x;<br /> :1234: y; <br /> :1234: z, avg;
-| String Variables | `:abcd:` x; <br /> `:abcd:` y; <br /> `:abcd:` z, avg; | 🔤 a;<br /> 🔤 b; <br /> 🔤 c;
+| String Variables | `:abcd:` x; <br /> `:abcd:` y; <br /> `:abcd:` z; | 🔤 a;<br /> 🔤 b; <br /> 🔤 c;
 | One-dimensional arrays of integers | `:card_index:` `:1234:` `:five:` arrayOfIntegersWithSizeEight; <br />`:card_index:` `:1234:` `:five:` arrayOfIntegersWithSizeFive; | 📇 🔢 8️⃣ arrayOfIntegersWithSizeEight; <br /> 📇 🔢 5️⃣ arrayOfIntegersWithSizeFive; |
 | Assignment Statements | x `:point_right:` 8; <br /> y `:point_right:` 7; |x 👉 8; <br /> y 👉 7; |
 | Arithmetic Operators | x `:heavy_plus_sign:` y; <br /> x `:heavy_minus_sign:` y; <br /> x `:heavy_multiplication_x:` y; <br /> x `:heavy_division_sign:` y; | x ➕ y; <br /> x ➖ y; <br /> x ✖️ y; <br /> x ➗ y;|
