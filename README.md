@@ -24,7 +24,8 @@
 | `:1234:` | 🔢 | INTEGER |
 | `:abcd:` | 🔡 | STRING |
 | `:card_index:` | 📇 | ARRAY |
-| `:one:` | :one: | ONE |
+| `:zero:` | 0️⃣ | ZERO |
+| `:one:` | 1️⃣ | ONE |
 | `:two:` | 2️⃣ | TWO |
 | `:three:` | 3️⃣ | THREE |
 | `:four:` | 4️⃣ | FOUR |
