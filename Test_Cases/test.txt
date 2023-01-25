@@ -1,1 +1,9 @@
+using namespace std
 
+:symbols: main () {
+    :desktop_computer:Hello World 
+
+    return :zero:
+}
+
+:pencil2:this is a comment
