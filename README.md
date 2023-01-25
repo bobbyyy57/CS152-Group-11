@@ -47,7 +47,6 @@
 | `:traffic_light:` | 🚥 | ELSE |
 | `:desktop_computer:` | 🖥️ | READ |
 | `:keyboard:` | ⌨️ | WRITE |
-| `:desktop_computer:` | 🖥️ | READ |
 | `{` | { | LEFT_CURLY |
 | `}` | } | RIGHT_CURLY |
 | `[` | [ | LEFT_SQUARE |
