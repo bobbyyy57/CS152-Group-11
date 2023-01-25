@@ -12,7 +12,7 @@
 | While or Do-While Loops | `:repeat:`[x `:arrow_backward:` 8] : {} <br />(do while x is less than 8) |  🔁[x ◀️ 8] : (do while x is less than 8) | 
 | If-then-else statements | `:vertical_traffic_light:` [x `:arrow_backward:` 5] {} <br />(if x is less than five) <br /> `:traffic_light:` [x `:arrow_backward:` 7] {} <br /> (else if x is less than 7) <br /> `:vertical_traffic_light:` {} (else) |🚦 [x ◀️ 5] {} (if x is less than five) <br /> 🚥 [x ◀️ 7] {} (else if x is less than 7) <br />🚦 {} (else) |
 | Read and write statements | `:desktop_computer:` x (print x); <br /> `:keyboard:` (Read following variable); | 🖥️ x (print x); <br /> ⌨️ (Read following variable); |
-| Comments | (comment goes here) | (comment goes here) |
+| Comments | `(comment goes here)` | `(comment goes here)` |
 | Functions | `:1234:` `:symbols:`[ `:1234:`x `:1234:`y] <br /> (function that takes in two ints and returns an int) (function symbol is `:symbols:` )| 🔢🔣[ 🔢x 🔢y] { (code) } <br /> (function that takes in two ints and returns an int) (function symbol is 🔣) |
 
 ##Valid Identifier - Variable names can't contain a ":", as this is used to denote the start and end of a token
