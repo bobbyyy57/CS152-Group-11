@@ -1,0 +1,14 @@
+:1234: m;
+:1234: n;
+:1234: o;
+
+:keyboard: n;
+:vertical_traffic_light:[ n :arrow_forward::point_right: :one::zero::zero:]{
+    :keyboard: n;
+}
+:vertical_traffic_light:{
+    m :point_right: n  :heavy_minus_sign: 1;
+    :keyboard: m;
+}
+
+:keyboard: o;
