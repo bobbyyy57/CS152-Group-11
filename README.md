@@ -16,7 +16,7 @@
 | Comments | `:pencil2:` This is a comment | ✏️ This is a comment |
 | Functions | `:1234:` `:symbols:`[ `:1234:`x `:1234:`y] <br /> (function that takes in two ints and returns an int) (function symbol is `:symbols:` )| 🔢🔣[ 🔢x 🔢y] { (code) } <br /> (function that takes in two ints and returns an int) (function symbol is 🔣) |
 
-##Valid Identifier - Variable names can't contain a ":", as this is used to denote the start and end of a token
+##Valid Identifier - Variable names can't contain a `:`, as this is used to denote the start and end of a token
 ##Case Sensitive - Language not case sensitive
 ##Whitespaces - Whitespaces are ignored
 
