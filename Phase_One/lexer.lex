@@ -51,6 +51,7 @@ NUM [0-9]
 ")"                         {printf("RIGHT_PARENTHESIS\n");}
 ":"                         {printf("COLON\n");}
 ";"                         {printf("SEMICOLON\n");}
+","                         {printf("COMA\n");}
 
 .		{printf("ERROR: unrecognized token"); return;}
 
