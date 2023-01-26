@@ -1,0 +1,16 @@
+:pencil2: initializing array
+:card_index::1234::three: array;
+
+:pencil2: initializing each element of array
+array[:zero:]:point_right::eight:
+array[:one:]:point_right::three:
+array[:two:]:point_right::zero:
+
+:pencil2: print out each element
+:desktop_computer:array[:zero:]
+:desktop_computer:array[:one:]
+:desktop_computer:array[:two:]
+
+:pencil2: printing out the sum of [0]+[2]
+:desktop_computer:(array[:zero:]+array[:two:])
+
