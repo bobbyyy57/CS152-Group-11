@@ -3,29 +3,21 @@
 %}
 
 ALPHA [a-zA-Z]
+INTEGER (":zero:"|":one:"|":two:"|":three:"|":four:"|":five:"|":six:"|":seven:"|":eight:"|":nine:")
+NUM [0-9]
 
 %%
 
-{ALPHA}+ 	                    {printf("STRING %s\n", yytext);}
-" "                             {printf("SPACE\n");}
-
+":pencil2:"({ALPHA}|\ )+           {printf("Comment %s\n", yytext);}
+{ALPHA}+ 	                {printf("VAR %s\n", yytext);}
+{INTEGER}+                      {printf("INT %s\n", yytext);}
+{NUM}+                          {printf("INT %s\n", yytext);}
+" "
+"\n"
        
-":1234:"		                {printf("INTEGER\n");}
+":1234:"		        {printf("INTEGER\n");}
 ":abcd:"                        {printf("STRING\n");}
 ":card_index:"                  {printf("ARRAY\n");}
-
-
-":zero:"                         {printf("ZERO\n");}
-":one:"                         {printf("ONE\n");}
-":two:"                         {printf("TWO\n");}
-":three:"                       {printf("THREE\n");}
-":four:"                        {printf("FOUR\n");}
-":five:"                        {printf("FIVE\n");}
-":six:"                         {printf("SIX\n");}
-":seven:"                       {printf("SEVEN\n");}
-":eight:"                       {printf("EIGHT\n");}
-":nine:"                        {printf("NINE\n");}
-
 
 
 ":heavy_plus_sign:"             {printf("PLUS\n");}
@@ -37,7 +29,7 @@ ALPHA [a-zA-Z]
 
 
 
-":symbols:"                     {printf("FUNCTIONS\n");}
+":symbols:"                     {printf("FUNCTION\n");}
 ":arrow_forward:"               {printf("GREATER_THAN\n");}
 ":arrow_backward:"              {printf("LESS_THAN\n");}
 ":vertical_traffic_light:"      {printf("IF\n");}
@@ -46,12 +38,8 @@ ALPHA [a-zA-Z]
 
 
 
-
 ":desktop_computer:"             {printf("READ\n");}
 ":keyboard:"                     {printf("WRITE\n");}
-":pencil2:"                      {printf("COMMENT\n");}
-
-
 
 
 

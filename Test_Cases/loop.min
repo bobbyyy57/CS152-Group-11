@@ -7,5 +7,5 @@ i :point_right: :zero:;
 
 :repeat:[ i :arrow_backward: :one::zero:]{
     i :point_right: i :heavy_plus_sign: :one:;
-    :keayboard: i;
+    :keyboard: i;
 }
