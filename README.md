@@ -7,7 +7,7 @@
 | Integer Scalar Variables | `:1234:` x; <br /> `:1234:` y; <br /> `:1234:` z, avg; |:1234: x;<br /> :1234: y; <br /> :1234: z, avg;
 | String Variables | `:abcd:` x; <br /> `:abcd:` y; <br /> `:abcd:` z; | 🔤 a;<br /> 🔤 b; <br /> 🔤 c;
 | One-dimensional arrays of integers | `:card_index:` `:1234:` `:five:` arrayOfIntegersWithSizeEight; <br />`:card_index:` `:1234:` `:five:` arrayOfIntegersWithSizeFive; | 📇 🔢 8️⃣ arrayOfIntegersWithSizeEight; <br /> 📇 🔢 5️⃣ arrayOfIntegersWithSizeFive; |
-| Assignment Statements | x `:point_right:` 8️⃣; <br /> y `:point_right:` :seven:; |x 👉 8️⃣; <br /> y 👉 :seven:; |
+| Assignment Statements | x `:point_right:` `:eight:`; <br /> y `:point_right:` `:seven:`; |x 👉 8️⃣; <br /> y 👉 :seven:; |
 | Arithmetic Operators | x `:heavy_plus_sign:` y; <br /> x `:heavy_minus_sign:` y; <br /> x `:heavy_multiplication_x:` y; <br /> x `:heavy_division_sign:` y; | x ➕ y; <br /> x ➖ y; <br /> x ✖️ y; <br /> x ➗ y;|
 | Relational Operators | x `:arrow_forward:`y (x greater than y) ; <br /> x `:arrow_backward:` y (x less than y) ;  <br /> x `:point_right:` `:point_right:` y (x equals y) ; <br /> x `:exclamantion:` `:point_right:` y (x does not equal y) ; | x▶️y (x greater than y) ; <br /> x ◀️ y (x less than y) ; <br /> x 👉 👉 y (x equals y) ; <br /> x ❗👉 y (x does not equal y) ; | 
 | While or Do-While Loops | `:repeat:`[x `:arrow_backward:` 8️⃣] : {} <br />(do while x is less than 8) |  🔁[x ◀️ 8️⃣] : (do while x is less than 8) | 
