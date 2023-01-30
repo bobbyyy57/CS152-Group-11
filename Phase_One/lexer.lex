@@ -9,7 +9,7 @@ NUM [0-9]
 
 %%
 
-":pencil2:"({ALPHA}|\ )+        {printf("Comment %s\n", yytext); row++; col = 0;}
+":pencil2:"({ALPHA}|\ |{INTEGER}|{NUM})+        {printf("Comment %s\n", yytext); row++; col = 0;}
 {ALPHA}+ 	                {printf("VAR %s\n", yytext); col += strlen(yytext);}
 {INTEGER}+                      {printf("INT %s\n", yytext); col += strlen(yytext);}
 {NUM}+                          {printf("INT %s\n", yytext); col += strlen(yytext);}
