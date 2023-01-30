@@ -58,5 +58,5 @@
 | `)` | ) | RIGHT_PARENTHESIS |
 | `:` | : | COLON |
 | `;` | ; | SEMICOLON |
-| `,` | , | COMA |
+| `,` | , | COMMA |
 
