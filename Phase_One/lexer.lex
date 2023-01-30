@@ -14,7 +14,8 @@ NUM [0-9]
 {INTEGER}+                      {printf("INT %s\n", yytext); col += strlen(yytext);}
 {NUM}+                          {printf("INT %s\n", yytext); col += strlen(yytext);}
 " "				{col++;}
-"\n"				{printf("%d - %d\n", row, col); row++; col = 0;}
+"\n"				{row++; col = 0;}
+
        
 ":1234:"		        {printf("INTEGER\n"); col += strlen(yytext);}
 ":abcd:"                        {printf("STRING\n"); col += strlen(yytext);}
@@ -29,7 +30,6 @@ NUM [0-9]
 ":exclamation:"                 {printf("NOT\n"); col += strlen(yytext);} 
 
 
-
 ":symbols:"                     {printf("FUNCTION\n"); col += strlen(yytext);}
 ":arrow_forward:"               {printf("GREATER_THAN\n"); col += strlen(yytext);}
 ":arrow_backward:"              {printf("LESS_THAN\n"); col += strlen(yytext);}
@@ -38,10 +38,8 @@ NUM [0-9]
 ":repeat:"                      {printf("WHILE\n"); col += strlen(yytext);}
 
 
-
 ":desktop_computer:"            {printf("READ\n"); col += strlen(yytext);}
 ":keyboard:"                    {printf("WRITE\n"); col += strlen(yytext);}
-
 
 
 "{"                             {printf("LEFT_CURLY\n"); col++;}
@@ -52,8 +50,10 @@ NUM [0-9]
 ")"                         	{printf("RIGHT_PARENTHESIS\n"); col++;}
 ":"                         	{printf("COLON\n"); col++;}
 ";"                         	{printf("SEMICOLON\n"); col++;}
+","				{printf("COMMA\n"); col++;}
 
-.		{printf("ERROR: unrecognized token"); return;}
+
+.				{printf("ERROR: unrecognized token"); return;}
 
 %%
 
