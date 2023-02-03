@@ -9,11 +9,14 @@ NUM [0-9]
 
 %%
 
-":pencil2:"([^\n])+        {printf("Comment %s\n", yytext); row++; col = 0;}
+":pencil2:"([^\n])*             {col += strlen(yytext);}
 {ALPHA}+ 	                {printf("VAR %s\n", yytext); col += strlen(yytext);}
-{INTEGER}+                      {printf("INT %s\n", yytext); col += strlen(yytext);}
+{INTEGER}+                      {printf("INT %d\n", toInt(yytext)); col += strlen(yytext);}
 {NUM}+                          {printf("INT %s\n", yytext); col += strlen(yytext);}
+({ALPHA}|{NUM})+		{printf("Invalid variable name %s at row: %d, col: %d\n", yytext, row, col); return;}
+
 " "				{col++;}
+"\t"				{col+=strlen(yytext);}
 "\n"				{row++; col = 0;}
 
        
@@ -48,14 +51,76 @@ NUM [0-9]
 "]"                         	{printf("RIGHT_SQUARE\n"); col++;}
 "("                         	{printf("LEFT_PARENTHESIS\n"); col++;}
 ")"                         	{printf("RIGHT_PARENTHESIS\n"); col++;}
-":"                         	{printf("COLON\n"); col++;}
 ";"                         	{printf("SEMICOLON\n"); col++;}
 ","				{printf("COMMA\n"); col++;}
 
 
-.				{printf("ERROR: unrecognized token"); return;}
+.				{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return;}
 
 %%
+
+int toInt(char* input) {
+	int toReturn = 0;
+
+	char currNum[5];
+
+	int reading = 0;
+	int toMult = 0;
+	int currInd = 0;
+	size_t i = 0;
+
+	for (; i < strlen(input); i++) {
+		if (input[i] == ':') {
+			if (!reading) {
+				reading = 1;
+				toMult = 0;
+				currInd = 0;
+				size_t j = 0;
+				for (; j < 5; j++) currNum[j] = '\0';
+			}
+			else {
+				reading = 0;
+				if (!strcmp(currNum, "zero")) {
+					toMult = 0;
+				}
+				else if (!strcmp(currNum, "one")) {
+					toMult = 1;
+				}
+				else if (!strcmp(currNum, "two")) {
+					toMult = 2;
+				}
+				else if (!strcmp(currNum, "three")) {
+					toMult = 3;
+				}
+				else if (!strcmp(currNum, "four")) {
+					toMult = 4;
+				}
+				else if (!strcmp(currNum, "five")) {
+                                        toMult = 5;
+                                }
+				else if (!strcmp(currNum, "six")) {
+                                        toMult = 6;
+                                }
+				else if (!strcmp(currNum, "seven")) {
+                                        toMult = 7;
+                                }
+				else if (!strcmp(currNum, "eight")) {
+                                        toMult = 8;
+                                }
+				else if (!strcmp(currNum, "nine")) {
+                                        toMult = 9;
+                                }
+				toReturn *= 10;
+				toReturn += toMult;
+			}
+			continue;
+		}
+		else {
+			currNum[currInd++] = input[i];
+		}
+	} 
+	return toReturn;	
+}
 
 main(int argc, char *argv[]){
 	yyin = stdin; //FOR PART 2
