@@ -60,6 +60,9 @@ NUM [0-9]
 ":point_right::point_right:"    {col+=strlen(yytext); return ISEQ;}
 ":exclamation::point_right:"    {col+=strlen(yytext); return NOTEQ;}
 
+":chains:"			{col+=strlen(yytext); return AND;}
+":question:"			{col+=strlen(yytext); return OR;}
+
 .								{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return;}
 
 %%

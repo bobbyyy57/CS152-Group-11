@@ -9,11 +9,11 @@
 %}
 
 // We don't have or?
-// Also specify array initialization/indexing
 // Also need string? Or remove them
 // Calling functions
 // Multiple conditions
 // Change/Add logical operators
+// Add not to cond
 
 %union {
     int val;
@@ -23,6 +23,7 @@
 %token 
     INTEGER STRING ARRAY FUNCTION IF ELSE
     WHILE READ WRITE ELSEIF GTE LTE ISEQ NOTEQ
+    AND OR
 
 %token <val> INT
 %token <name> VAR
