@@ -1,14 +1,14 @@
-:1234: m;
-:1234: n;
-:1234: o;
+:abcd: one :point_right: one;
+:abcd: two :point_right: two;
+:abcd: three :point_right: three;
 
 :keyboard: n;
-:vertical_traffic_light:[ n :arrow_forward::point_right: :one::zero::zero:]{
-    :keyboard: n;
+:vertical_traffic_light:[ n :arrow_backward::point_right: :one::zero::zero:]{
+    :desktop_computer: one; 
 }
-:vertical_traffic_light:{
-    m :point_right: n  :heavy_minus_sign: 1;
-    :keyboard: m;
+:traffic_light::vertical_traffic_light:[n :arrow_backward::point_right: :two::zero::zero:]{
+    :desktop_computer: two; 
 }
-
-:keyboard: o;
+:traffic_light: {
+    :desktop_computer: three; 
+}
