@@ -32,7 +32,8 @@
 
 %start start
 
-// Need precedence rules?
+%left '+' '-'
+%left '*' '/'
 
 %%
 start: statements {printf("start -> statements\n");}
@@ -53,13 +54,11 @@ statement: var_decl ';' {printf("statement -> var_decl ;\n");}
 
 
 var_type: INTEGER {printf("var_type -> INTEGER\n");}
-| ARRAY var_type arr_args {printf("var_type -> ARRAY var_type arr_args\n");}
+| ARRAY var_type arr_len {printf("var_type -> ARRAY var_type arr_len");}
 ;
 
-arr_args: value {printf("arr_args -> value\n");}
-| variable {printf("arr_args -> variable\n");}
-| /*empty*/ {printf("arr_args -> epsilon\n");}
-; 
+arr_len: variable {printf("arr_len -> variable\n");}
+| value {printf("arr_len -> value\n");}
 
 var_decl: var_type assignment {printf("var_decl -> var_type assignment\n");}
 ;
@@ -131,10 +130,10 @@ variable: VAR {printf("variable -> VAR %s\n", yylval.name);}
 value: INT {printf("value -> INT %d\n", yylval.val);}
 ;
 array: '{' arr_vals '}' {printf("array -> {arr_vals}\n");}
+| '{' '}' {printf("array -> {}\n");}
 ;
 arr_vals: values ',' arr_vals {printf("arr_vals -> values, arr_vals\n");}
 | values {printf("arr_vals -> values\n");}
-| /*empty*/ {printf("arr_vals -> epsilon\n");}
 ;
 %%
 
