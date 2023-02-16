@@ -55,6 +55,10 @@ NUM [0-9]
 ";"                         	{col++; return ';';}
 ","				{col++; return ',';}
 
+":arrow_forward::point_right:"  {col+=strlen(yytext); return GTE;}
+":arrow_backward::point_right:" {col+=strlen(yytext); return LTE;}
+":point_right::point_right:"    {col+=strlen(yytext); return ISEQ;}
+":exclamation::point_right:"    {col+=strlen(yytext); return NOTEQ;}
 
 .								{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return;}
 

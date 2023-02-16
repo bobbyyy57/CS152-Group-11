@@ -25,12 +25,13 @@
 
 %token 
     INTEGER STRING ARRAY FUNCTION IF ELSE
-    WHILE READ WRITE ELSEIF
+    WHILE READ WRITE ELSEIF GTE LTE ISEQ NOTEQ
 
 %token <val> INT
 %token <name> VAR
 
 %start start
+%define parse.error verbose
 
 %left '+' '-'
 %left '*' '/'
@@ -97,7 +98,7 @@ params: var_decl ',' params {printf("params -> var_decl, params\n");}
 cond: IF '[' conditions ']' '{' statements '}' elseif {printf("cond -> IF [conditions] {statements} elseif\n");}
 ;
 
-elseif: elseif ELSEIF '[' conditions ']' '{' statements '}' {printf("elseif -> elseif ELSEIF [conditions] {statements}\n");}
+elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif {printf("elseif -> ELSEIF [conditions] {statements} elseif\n");}
 | else {printf("elseif -> else\n");}
 ;
 else: ELSE '{' statements '}' {printf("else -> ELSE {statements}\n");}
@@ -107,10 +108,20 @@ else: ELSE '{' statements '}' {printf("else -> ELSE {statements}\n");}
 loop: WHILE '[' conditions ']' '{' statements '}' {printf("loop -> WHILE [conditions] {statements}\n");}
 ;
 
-conditions: condition {printf("conditions -> condition\n");}
+conditions: condition {printf("conditions -> condition, TODO: add and and or\n");}
 ;
 
-condition: /*empty*/ {printf("TODO Add logical operators!\n");}
+condition: condition conditional values {printf("condition -> condition conditiional values\n");}
+| values {printf("condition -> values\n");}
+| '(' condition ')' {printf("condition -> (condition)\n");} 
+;
+
+conditional: '>' {printf("conditional -> >\n");}
+| '<' {printf("conditional -> <\n");}
+| GTE {printf("conditional -> GTE\n");}
+| LTE {printf("conditional -> LTE\n");}
+| ISEQ {printf("conditional -> ISEQ\n");}
+| NOTEQ {printf("conditional -> NOTEQ\n");}
 ;
 
 io: READ variable {printf("io -> READ variable\n");}
