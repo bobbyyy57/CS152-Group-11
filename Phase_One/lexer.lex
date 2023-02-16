@@ -1,5 +1,5 @@
 %{
-#include <stdio.h>
+#include "y.tab.h"
 int row = 0, col = 0;
 %}
 
@@ -10,52 +10,52 @@ NUM [0-9]
 %%
 
 ":pencil2:"([^\n])*             {col += strlen(yytext);}
-{ALPHA}+ 	                {printf("VAR %s\n", yytext); col += strlen(yytext);}
-{INTEGER}+                      {printf("INT %d\n", toInt(yytext)); col += strlen(yytext);}
+{ALPHA}+ 	               	 	{yylval.name = strdup(yytext); col += strlen(yytext); return VAR;}
+{INTEGER}+                      {yylval.val = toInt(yytext); col += strlen(yytext); return INT;}
 {NUM}+                          {printf("INT %s\n", yytext); col += strlen(yytext);}
-({ALPHA}|{NUM})+		{printf("Invalid variable name %s at row: %d, col: %d\n", yytext, row, col); return;}
+({ALPHA}|{NUM})+				{printf("Invalid variable name %s at row: %d, col: %d\n", yytext, row, col); exit(0);}
 
-" "				{col++;}
-"\t"				{col+=strlen(yytext);}
-"\n"				{row++; col = 0;}
+" "								{col++;}
+"\t"							{col+=strlen(yytext);}
+"\n"							{row++; col = 0;}
 
        
-":1234:"		        {printf("INTEGER\n"); col += strlen(yytext);}
-":abcd:"                        {printf("STRING\n"); col += strlen(yytext);}
-":card_index:"                  {printf("ARRAY\n"); col += strlen(yytext);}
+":1234:"		        		{col += strlen(yytext); return INTEGER;}
+":abcd:"                        {col += strlen(yytext); return STRING;}
+":card_index:"                  {col += strlen(yytext); return ARRAY;}
 
 
-":heavy_plus_sign:"             {printf("PLUS\n"); col += strlen(yytext);}
-":heavy_minus_sign:"            {printf("MINUS\n"); col += strlen(yytext);}
-":heavy_multiplication_x:"      {printf("MULTIPLICATION\n"); col += strlen(yytext);}
-":heavy_division_sign:"         {printf("DIVISION\n"); col += strlen(yytext);}
-":point_right:"                 {printf("EQUAL\n"); col += strlen(yytext);}
-":exclamation:"                 {printf("NOT\n"); col += strlen(yytext);} 
+":heavy_plus_sign:"             {col += strlen(yytext); return '+';}
+":heavy_minus_sign:"            {col += strlen(yytext); return '-';}
+":heavy_multiplication_x:"      {col += strlen(yytext); return '*';}
+":heavy_division_sign:"         {col += strlen(yytext); return '/';}
+":point_right:"                 {col += strlen(yytext); return '=';}
+":exclamation:"                 {col += strlen(yytext); return '!';} 
 
 
-":symbols:"                     {printf("FUNCTION\n"); col += strlen(yytext);}
-":arrow_forward:"               {printf("GREATER_THAN\n"); col += strlen(yytext);}
-":arrow_backward:"              {printf("LESS_THAN\n"); col += strlen(yytext);}
-":vertical_traffic_light:"      {printf("IF\n"); col += strlen(yytext);}
-":traffic_light:"               {printf("ELSE\n"); col += strlen(yytext);}
-":repeat:"                      {printf("WHILE\n"); col += strlen(yytext);}
+":symbols:"                     {col += strlen(yytext); return FUNCTION;}
+":arrow_forward:"               {col += strlen(yytext); return '>';}
+":arrow_backward:"              {col += strlen(yytext); return '<';}
+":vertical_traffic_light:"      {col += strlen(yytext); return IF;}
+":traffic_light:"               {col += strlen(yytext); return ELSE;}
+":repeat:"                      {col += strlen(yytext); return WHILE;}
 
 
-":desktop_computer:"            {printf("READ\n"); col += strlen(yytext);}
-":keyboard:"                    {printf("WRITE\n"); col += strlen(yytext);}
+":desktop_computer:"            {col += strlen(yytext); return READ;}
+":keyboard:"                    {col += strlen(yytext); return WRITE;}
 
 
-"{"                             {printf("LEFT_CURLY\n"); col++;}
-"}"                         	{printf("RIGHT_CURLY\n"); col++;}
-"["                         	{printf("LEFT_SQUARE\n"); col++;}
-"]"                         	{printf("RIGHT_SQUARE\n"); col++;}
-"("                         	{printf("LEFT_PARENTHESIS\n"); col++;}
-")"                         	{printf("RIGHT_PARENTHESIS\n"); col++;}
-";"                         	{printf("SEMICOLON\n"); col++;}
-","				{printf("COMMA\n"); col++;}
+"{"                             {col++; return '{';}
+"}"                         	{col++; return '}';}
+"["                         	{col++; return '[';}
+"]"                         	{col++; return ']';}
+"("                         	{col++; return '(';}
+")"                         	{col++; return ')';}
+";"                         	{col++; return ';';}
+","				{col++; return ',';}
 
 
-.				{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return;}
+.								{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return;}
 
 %%
 
@@ -122,14 +122,13 @@ int toInt(char* input) {
 	return toReturn;	
 }
 
-main(int argc, char *argv[]){
-	yyin = stdin; //FOR PART 2
-	//printf("INTEGER: %d\n");
-	printf("Crtl+D to quit\n");
-	
-	yyin = fopen(argv[1], "r");
-	yylex();
-	fclose(yyin);
+//main(int argc, char *argv[]){
+//	yyin = stdin; //FOR PART 2
+//	//printf("INTEGER: %d\n");
+//	printf("Crtl+D to quit\n");
+//	
+//	yyin = fopen(argv[1], "r");
+//	yylex();
+//	fclose(yyin);
 
-
-}
+//}
