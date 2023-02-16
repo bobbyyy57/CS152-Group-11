@@ -45,6 +45,7 @@
 | `:arrow_backward:` | ◀️ | LESS_THAN |
 | `:question:` | ❓ | OR |
 | `:exclamation:` | ❗ | NOT |
+| `:chains:` | :chains: | AND |
 | `:repeat:` | 🔁 | WHILE |
 | `:vertical_traffic_light:` | 🚦 | IF |
 | `:traffic_light:` | 🚥 | ELSE |
