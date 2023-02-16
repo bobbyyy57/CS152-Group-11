@@ -11,7 +11,7 @@
 | Arithmetic Operators | x `:heavy_plus_sign:` y; <br /> x `:heavy_minus_sign:` y; <br /> x `:heavy_multiplication_x:` y; <br /> x `:heavy_division_sign:` y; | x ➕ y; <br /> x ➖ y; <br /> x ✖️ y; <br /> x ➗ y;|
 | Relational Operators | x `:arrow_forward:`y (x greater than y) ; <br /> x `:arrow_backward:` y (x less than y) ;  <br /> x `:point_right:` `:point_right:` y (x equals y) ; <br /> x `:exclamantion:` `:point_right:` y (x does not equal y) ; | x▶️y (x greater than y) ; <br /> x ◀️ y (x less than y) ; <br /> x 👉 👉 y (x equals y) ; <br /> x ❗👉 y (x does not equal y) ; | 
 | While or Do-While Loops | `:repeat:`[x `:arrow_backward:` `:eight:`] {} <br />(do while x is less than 8) |  🔁[x ◀️ 8️⃣] (do while x is less than 8) | 
-| If-then-else statements | `:vertical_traffic_light:` [x `:arrow_backward:` `:five:`] {} <br />(if x is less than five) <br /> `:traffic_light:` [x `:arrow_backward:` `:seven:`] {} <br /> (else if x is less than 7) <br /> `:vertical_traffic_light:` {} (else) |🚦 [x ◀️ :five:] {} (if x is less than five) <br /> 🚥 [x ◀️ :seven:] {} (else if x is less than 7) <br />🚦 {} (else) |
+| If-then-else statements | `:vertical_traffic_light:` [x `:arrow_backward:` `:five:`] {} <br />(if x is less than five) <br /> `:traffic_light::vertical_traffic_light:` [x `:arrow_backward:` `:seven:`] {} <br /> (else if x is less than 7) <br /> `:traffic_light:` {} (else) |🚦 [x ◀️ :five:] {} (if x is less than five) <br /> 🚥🚦 [x ◀️ :seven:] {} (else if x is less than 7) <br />🚥 {} (else) |
 | Read and write statements | `:desktop_computer:` x (print x); <br /> `:keyboard:` (Read following variable); | 🖥️ x (print x); <br /> ⌨️ (Read following variable); |
 | Comments | `:pencil2:` This is a comment | ✏️ This is a comment |
 | Functions | `:1234:` `:symbols:`[ `:1234:`x `:1234:`y] <br /> (function that takes in two ints and returns an int) (function symbol is `:symbols:` )| 🔢🔣[ 🔢x 🔢y] { (code) } <br /> (function that takes in two ints and returns an int) (function symbol is 🔣) |
@@ -43,6 +43,7 @@
 | `:point_right` | 👉 | EQUAL |
 | `:arrow_forward:` | ▶️ | GREATER_THAN |
 | `:arrow_backward:` | ◀️ | LESS_THAN |
+| `:question:` | ❓ | OR |
 | `:exclamation:` | ❗ | NOT |
 | `:repeat:` | 🔁 | WHILE |
 | `:vertical_traffic_light:` | 🚦 | IF |
