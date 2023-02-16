@@ -48,6 +48,7 @@ statement: var_decl ';' {printf("statement -> var_decl ;\n");}
 | loop {printf("statement -> loop\n");}
 | io ';' {printf("statement -> io ;\n");}
 | assignment ';' {printf("statement -> assignment ;\n");} 
+| func_call ';' {printf("statement -> func_call ;\n");}
 ;
 
 
@@ -60,6 +61,9 @@ arr_len: variable {printf("arr_len -> variable\n");}
 | value {printf("arr_len -> value\n");}
 
 var_decl: var_type assignment {printf("var_decl -> var_type assignment\n");}
+;
+
+func_call: VAR '(' func_params {printf("func_call -> VAR ( func_params\n");}
 ;
 
 assignment: variable set_val {printf("assignment -> variable set_val\n");}
@@ -132,7 +136,11 @@ values: variable {printf("values -> variable\n");}
 | value {printf("values -> value\n");}
 | array {printf("values -> array\n");}
 | variable '[' index {printf("values -> '[' index\n");}
+| func_call {printf("values -> '(' func_calls\n");}
 ; // Add strings if we are keeping strings
+func_params: values func_params {printf("func_params: values func_params\n");}
+| ')' {printf("func_params -> ')'\n");} 
+;
 p: '(' exp ')' {printf("p -> (exp)\n");}
 ;
 md: '*' {printf("md -> *\n");}
