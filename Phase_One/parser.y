@@ -11,12 +11,9 @@
 // We don't have or?
 // Also specify array initialization/indexing
 // Also need string? Or remove them
-// Naming functions
 // Calling functions
 // Multiple conditions
-// Add else_if
 // Change/Add logical operators
-// Change/Add boolean operators
 
 %union {
     int val;
@@ -133,6 +130,7 @@ io: READ variable {printf("io -> READ variable\n");}
 values: variable {printf("values -> variable\n");}
 | value {printf("values -> value\n");}
 | array {printf("values -> array\n");}
+| variable '[' index {printf("values -> '[' index\n");}
 ; // Add strings if we are keeping strings
 p: '(' exp ')' {printf("p -> (exp)\n");}
 ;
@@ -143,6 +141,8 @@ as: '+' {printf("as -> +\n");}
 | '-' {printf("as -> -\n");}
 ;
 variable: VAR {printf("variable -> VAR %s\n", yylval.name);}
+;
+index: values ']' {printf("index -> values ]\n");}
 ;
 value: INT {printf("value -> INT %d\n", yylval.val);}
 ;
