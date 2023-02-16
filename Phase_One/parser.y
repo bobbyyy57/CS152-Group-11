@@ -25,7 +25,7 @@
 
 %token 
     INTEGER STRING ARRAY FUNCTION IF ELSE
-    WHILE READ WRITE
+    WHILE READ WRITE ELSEIF
 
 %token <val> INT
 %token <name> VAR
@@ -94,8 +94,14 @@ params: var_decl ',' params {printf("params -> var_decl, params\n");}
 
 
 
-cond: IF '[' conditions ']' '{' statements '}' {printf("cond -> IF [conditions] {statements}\n");}
-| ELSE '{' statements '}' {printf("cond -> ELSE {statements}\n");}
+cond: IF '[' conditions ']' '{' statements '}' elseif {printf("cond -> IF [conditions] {statements} elseif\n");}
+;
+
+elseif: elseif ELSEIF '[' conditions ']' '{' statements '}' {printf("elseif -> elseif ELSEIF [conditions] {statements}\n");}
+| else {printf("elseif -> else\n");}
+;
+else: ELSE '{' statements '}' {printf("else -> ELSE {statements}\n");}
+| /*empty*/ {printf("else -> epsilon\n");}
 ; 
 
 loop: WHILE '[' conditions ']' '{' statements '}' {printf("loop -> WHILE [conditions] {statements}\n");}

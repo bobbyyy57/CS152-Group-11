@@ -37,7 +37,8 @@ NUM [0-9]
 ":arrow_forward:"               {col += strlen(yytext); return '>';}
 ":arrow_backward:"              {col += strlen(yytext); return '<';}
 ":vertical_traffic_light:"      {col += strlen(yytext); return IF;}
-":traffic_light:"               {col += strlen(yytext); return ELSE;}
+":vertical_traffic_light::traffic_light:"               {col += strlen(yytext); return ELSEIF;}
+":traffic_light:"		{col += strlen(yytext); return ELSE;}
 ":repeat:"                      {col += strlen(yytext); return WHILE;}
 
 
