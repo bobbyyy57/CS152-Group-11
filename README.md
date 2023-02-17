@@ -52,6 +52,7 @@
 | `:desktop_computer:` | 🖥️ | READ |
 | `:pencil1:`| ✏️| COMMENT|
 | `:keyboard:` | ⌨️ | WRITE |
+| `:athletic_shoe:` | :athletic_shoe: | RETURN |
 | `{` | { | LEFT_CURLY |
 | `}` | } | RIGHT_CURLY |
 | `[` | [ | LEFT_SQUARE |
