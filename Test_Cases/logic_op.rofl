@@ -1,0 +1,15 @@
+:1234: :symbols: add(:1234: a, :1234: b) {
+    :athletic_shoe: a :heavy_plus_sign: b;
+
+:1234: main() {
+
+    :1234: two :point_right :two:;
+    :1234: four :point_right :four:;
+    :1234: sum;
+
+    if (two :point_right: :point_right: :two: :chains: four :point_right: :point_right: :four:) {
+        sum :point_right: add(:two:, :four:);
+    }
+
+    :athletic_shoe: :zero:;
+}
