@@ -42,8 +42,8 @@ NUM [0-9]
 ":repeat:"                      {col += strlen(yytext); return WHILE;}
 
 
-":desktop_computer:"            {col += strlen(yytext); return READ;}
-":keyboard:"                    {col += strlen(yytext); return WRITE;}
+":desktop_computer:"            {col += strlen(yytext); return WRITE;}
+":keyboard:"                    {col += strlen(yytext); return READ;}
 
 
 "{"                             {col++; return '{';}
@@ -62,6 +62,7 @@ NUM [0-9]
 
 ":chains:"			{col+=strlen(yytext); return AND;}
 ":question:"			{col+=strlen(yytext); return OR;}
+":athletic_shoe:"		{col+=strlen(yytext); return RETURN;}
 
 .								{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return;}
 

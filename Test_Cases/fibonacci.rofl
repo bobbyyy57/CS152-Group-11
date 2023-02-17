@@ -1,0 +1,15 @@
+:1234::symbols: fibonacci [:1234: k] {
+:vertical_traffic_light:[k :arrow_backward::point_right: :one:] {
+:athletic_shoe: :one:;
+}
+:athletic_shoe: fibonacci(k:heavy_minus_sign::one:) :heavy_plus_sign: fibonacci(k:heavy_minus_sign: :two:);
+}
+
+:1234::symbols: main [] {
+:1234: n;
+:1234: fibn;
+
+:desktop_computer: n;
+fibn :point_right: fibonacci(n);
+:keyboard: fibn;
+}

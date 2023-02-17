@@ -12,5 +12,5 @@ array[:two:]:point_right::zero:;
 :desktop_computer:array[:two:];
 
 :pencil2: printing out the sum of 0 and 2
-:desktop_computer:(array[:zero:]:heavy_plus_sign:array[:two:]);
+:desktop_computer: array[:zero:]:heavy_plus_sign:array[:two:];
 

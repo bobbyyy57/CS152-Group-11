@@ -23,7 +23,7 @@
 %token 
     INTEGER STRING ARRAY FUNCTION IF ELSE
     WHILE READ WRITE ELSEIF GTE LTE ISEQ NOTEQ
-    AND OR
+    AND OR RETURN
 
 %token <val> INT
 %token <name> VAR
@@ -48,7 +48,7 @@ statement: var_decl ';' {printf("statement -> var_decl ;\n");}
 | loop {printf("statement -> loop\n");}
 | io ';' {printf("statement -> io ;\n");}
 | assignment ';' {printf("statement -> assignment ;\n");} 
-| func_call ';' {printf("statement -> func_call ;\n");}
+| return ';' {printf("statement -> return ;\n");}
 ;
 
 
@@ -63,10 +63,8 @@ arr_len: variable {printf("arr_len -> variable\n");}
 var_decl: var_type assignment {printf("var_decl -> var_type assignment\n");}
 ;
 
-func_call: VAR '(' func_params {printf("func_call -> VAR ( func_params\n");}
-;
 
-assignment: variable set_val {printf("assignment -> variable set_val\n");}
+assignment: values set_val {printf("assignment -> variable set_val\n");}
 ;
 
 set_val: '=' exp {printf("set_val -> = exp\n");}
@@ -87,7 +85,7 @@ factor: p {printf("factor -> p\n");}
 
 
 
-func_decl: values FUNCTION variable '[' params ']' '{' statements '}' {printf("func_decl -> values FUNCTION variable [params] {statements}\n");}
+func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {printf("func_decl -> var_type FUNCTION variable [params] {statements}\n");}
 ;
 
 params: var_decl ',' params {printf("params -> var_decl, params\n");}
@@ -113,9 +111,9 @@ loop: WHILE '[' conditions ']' '{' statements '}' {printf("loop -> WHILE [condit
 conditions: condition {printf("conditions -> condition, TODO: add and and or\n");}
 ;
 
-condition: condition conditional values {printf("condition -> condition conditiional values\n");}
-| values {printf("condition -> values\n");}
-| '(' condition ')' {printf("condition -> (condition)\n");} 
+condition: condition conditional exp {printf("condition -> condition conditiional exp\n");}
+| exp {printf("condition -> exp\n");}
+| '(' condition conditional exp ')' {printf("condition -> (condition conditional exp)\n");} 
 ;
 
 conditional: '>' {printf("conditional -> >\n");}
@@ -127,7 +125,12 @@ conditional: '>' {printf("conditional -> >\n");}
 ;
 
 io: READ variable {printf("io -> READ variable\n");}
-| WRITE values {printf("io -> WRITE values\n");}
+| WRITE exp {printf("io -> WRITE exp\n");}
+;
+
+
+
+return: RETURN exp {printf("return -> RETURN exp\n");}
 ;
 
 
@@ -136,9 +139,10 @@ values: variable {printf("values -> variable\n");}
 | value {printf("values -> value\n");}
 | array {printf("values -> array\n");}
 | variable '[' index {printf("values -> '[' index\n");}
-| func_call {printf("values -> '(' func_calls\n");}
+| variable '(' func_params {printf("values -> '(' func_calls\n");}
 ; // Add strings if we are keeping strings
-func_params: values func_params {printf("func_params: values func_params\n");}
+func_params: exp ',' func_params {printf("func_params: values func_params\n");}
+| exp ')' {printf("func_params -> exp\n");}
 | ')' {printf("func_params -> ')'\n");} 
 ;
 p: '(' exp ')' {printf("p -> (exp)\n");}
