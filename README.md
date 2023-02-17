@@ -14,7 +14,7 @@
 | If-then-else statements | `:vertical_traffic_light:` [x `:arrow_backward:` `:five:`] {} <br />(if x is less than five) <br /> `:traffic_light::vertical_traffic_light:` [x `:arrow_backward:` `:seven:`] {} <br /> (else if x is less than 7) <br /> `:traffic_light:` {} (else) |🚦 [x ◀️ :five:] {} (if x is less than five) <br /> 🚥🚦 [x ◀️ :seven:] {} (else if x is less than 7) <br />🚥 {} (else) |
 | Read and write statements | `:desktop_computer:` x (print x); <br /> `:keyboard:` (Read following variable); | 🖥️ x (print x); <br /> ⌨️ (Read following variable); |
 | Comments | `:pencil2:` This is a comment | ✏️ This is a comment |
-| Functions | `:1234:` `:symbols:`[ `:1234:`x `:1234:`y] <br /> (function that takes in two ints and returns an int) (function symbol is `:symbols:` )| 🔢🔣[ 🔢x 🔢y] { (code) } <br /> (function that takes in two ints and returns an int) (function symbol is 🔣) |
+| Functions | `:1234:` `:symbols:`name[ `:1234:`x `:1234:`y] <br /> (function that takes in two ints and returns an int) (function symbol is `:symbols:` )| 🔢🔣name[ 🔢x 🔢y] { (code) } <br /> (function, name, that takes in two ints and returns an int) (function symbol is 🔣) |
 
 ## Valid Identifier - Variable names can only contain letters
 ## Case Sensitive - Language is case sensitive
