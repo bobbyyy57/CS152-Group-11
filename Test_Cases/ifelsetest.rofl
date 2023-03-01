@@ -1,6 +1,7 @@
-:abcd: one :point_right: one;
-:abcd: two :point_right: two;
-:abcd: three :point_right: three;
+:1234::symbols:x[]{
+:1234: one :point_right: :one:;
+:1234: two :point_right: :two:;
+:1234: three :point_right: :three:;
 
 :keyboard: n;
 :vertical_traffic_light:[ n :arrow_backward::point_right: :one::zero::zero:]{
@@ -11,4 +12,6 @@
 }
 :traffic_light: {
     :desktop_computer: three; 
+}
+:athletic_shoe: n;
 }

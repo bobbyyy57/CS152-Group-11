@@ -8,12 +8,6 @@
     }
 %}
 
-// We don't have or?
-// Also need string? Or remove them
-// Calling functions
-// Multiple conditions
-// Change/Add logical operators
-// Add not to cond
 
 %union {
     int val;
@@ -35,7 +29,8 @@
 %left '*' '/'
 
 %%
-start: statements {printf("start -> statements\n");}
+start: func_decl {printf("start -> statements\n");}
+| /*empty*/ {printf("start -> epsilon\n");}
 ;
 
 statements: statement statements {printf("statements -> statement statements\n");}
@@ -43,7 +38,7 @@ statements: statement statements {printf("statements -> statement statements\n")
 ;
 
 statement: var_decl ';' {printf("statement -> var_decl ;\n");}
-| func_decl {printf("statement -> func_decl\n");}
+//| func_decl {printf("statement -> func_decl\n");}
 | cond {printf("statement -> cond\n");}
 | loop {printf("statement -> loop\n");}
 | io ';' {printf("statement -> io ;\n");}
@@ -64,7 +59,7 @@ var_decl: var_type assignment {printf("var_decl -> var_type assignment\n");}
 ;
 
 
-assignment: values set_val {printf("assignment -> variable set_val\n");}
+assignment: values set_val {printf("assignment -> values set_val\n");}
 ;
 
 set_val: '=' exp {printf("set_val -> = exp\n");}
@@ -86,6 +81,7 @@ factor: p {printf("factor -> p\n");}
 
 
 func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {printf("func_decl -> var_type FUNCTION variable [params] {statements}\n");}
+| var_type FUNCTION variable '[' params ']' '{' statements '}' func_decl
 ;
 
 params: var_decl ',' params {printf("params -> var_decl, params\n");}
@@ -108,7 +104,9 @@ else: ELSE '{' statements '}' {printf("else -> ELSE {statements}\n");}
 loop: WHILE '[' conditions ']' '{' statements '}' {printf("loop -> WHILE [conditions] {statements}\n");}
 ;
 
-conditions: condition {printf("conditions -> condition, TODO: add and and or\n");}
+conditions: condition {printf("conditions -> condition\n");}
+| condition AND conditions {printf("conditions -> condition AND conditions\n");}
+| condition OR conditions {printf("conditions -> condition OR conditions\n");}
 ;
 
 condition: condition conditional exp {printf("condition -> condition conditiional exp\n");}
@@ -139,10 +137,10 @@ values: variable {printf("values -> variable\n");}
 | value {printf("values -> value\n");}
 | array {printf("values -> array\n");}
 | variable '[' index {printf("values -> '[' index\n");}
-| variable '(' func_params {printf("values -> '(' func_calls\n");}
-; // Add strings if we are keeping strings
-func_params: exp ',' func_params {printf("func_params: values func_params\n");}
-| exp ')' {printf("func_params -> exp\n");}
+| variable '(' func_params {printf("values -> '(' func_params\n");}
+; 
+func_params: exp ',' func_params {printf("func_params: exp, func_params\n");}
+| exp ')' {printf("func_params -> exp)\n");}
 | ')' {printf("func_params -> ')'\n");} 
 ;
 p: '(' exp ')' {printf("p -> (exp)\n");}

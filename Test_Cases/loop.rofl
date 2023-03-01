@@ -1,3 +1,4 @@
+:1234::symbols:main[] {
 :pencil2: Creating an integer value x and initilazied to 0
 
 :1234: i; 
@@ -8,4 +9,6 @@ i :point_right: :zero:;
 :repeat:[ i :arrow_backward: :one::zero:]{
     i :point_right: i :heavy_plus_sign: :one:;
     :keyboard: i;
+}
+:athletic_shoe: i;
 }
