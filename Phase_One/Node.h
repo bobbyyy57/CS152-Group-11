@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <string.h>
+//#include <stdio.h>
+#include <string>
 
 struct Node {
-    char code;
-    char name;
+    std::string code;
+    std::string name;
 };

@@ -1,6 +1,7 @@
 %{
 #include "y.tab.h"
 int row = 0, col = 0;
+int toInt(char*);
 %}
 
 ALPHA [a-zA-Z]
@@ -64,7 +65,7 @@ NUM [0-9]
 ":question:"			{col+=strlen(yytext); return OR;}
 ":athletic_shoe:"		{col+=strlen(yytext); return RETURN;}
 
-.								{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return;}
+.								{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return -1;}
 
 %%
 
