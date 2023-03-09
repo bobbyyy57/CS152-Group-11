@@ -13,6 +13,8 @@ NUM [0-9]
 ":pencil2:"([^\n])*             {col += strlen(yytext);}
 {ALPHA}+ 	               	 	{yylval.name = strdup(yytext); col += strlen(yytext); return VAR;}
 {INTEGER}+                      {yylval.val = toInt(yytext); col += strlen(yytext); return INT;}
+
+
 {NUM}+                          {printf("INT %s\n", yytext); col += strlen(yytext);}
 ({ALPHA}|{NUM})+				{printf("Invalid variable name %s at row: %d, col: %d\n", yytext, row, col); exit(0);}
 
@@ -35,6 +37,7 @@ NUM [0-9]
 
 
 ":symbols:"                     {col += strlen(yytext); return FUNCTION;}
+"main"                     		{col += strlen(yytext); return MAIN;}
 ":arrow_forward:"               {col += strlen(yytext); return '>';}
 ":arrow_backward:"              {col += strlen(yytext); return '<';}
 ":vertical_traffic_light:"      {col += strlen(yytext); return IF;}
@@ -68,6 +71,8 @@ NUM [0-9]
 .								{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return -1;}
 
 %%
+
+
 
 int toInt(char* input) {
 	int toReturn = 0;

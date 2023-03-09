@@ -3,7 +3,12 @@
     extern int yylex();
    
     #include <stdio.h>
+    #include <string>
+    #include <vector>
+    #include <string.h>
     #include "Node.h"
+
+    using namespace std;
     
     extern FILE* yyin;
     extern int row, col;
@@ -12,12 +17,62 @@
         printf("ERROR: Row %d, Col %d, %s\n", row, col, msg);
     }
 
-    /*struct CodeNode {
-      char* code;
-      char* name;
-    };*/
+    enum Type { Integer, Array };
+    struct Symbol {
+    string name;
+    Type type;
+    };
+    struct Function {
+    string name;
+    vector<Symbol> declarations;
+    };
 
-    bool MULOP = false;
+    vector <Function> symbol_table;
+
+
+    Function *get_function() {
+    int last = symbol_table.size()-1;
+    return &symbol_table[last];
+    }
+
+    bool find(string &value) {
+    Function *f = get_function();
+    for(int i=0; i < f->declarations.size(); i++) {
+        Symbol *s = &f->declarations[i];
+        if (s->name == value) {
+        return true;
+        }
+    }
+    return false;
+    }
+
+    void add_function_to_symbol_table(string &value) {
+    Function f; 
+    f.name = value; 
+    symbol_table.push_back(f);
+    }
+
+    void add_variable_to_symbol_table(string &value, Type t) {
+    Symbol s;
+    s.name = value;
+    s.type = t;
+    Function *f = get_function();
+    f->declarations.push_back(s);
+    }
+
+    void print_symbol_table(void) {
+    printf("symbol table:\n");
+    printf("--------------------\n");
+    for(int i=0; i<symbol_table.size(); i++) {
+        printf("function: %s\n", symbol_table[i].name.c_str());
+        for(int j=0; j<symbol_table[i].declarations.size(); j++) {
+        printf("  locals: %s\n", symbol_table[i].declarations[j].name.c_str());
+        }
+    }
+    printf("--------------------\n");
+    }
+
+    bool start = true;
 
 %}
 
@@ -31,7 +86,7 @@
 %token <name>
     INTEGER STRING ARRAY FUNCTION IF ELSE
     WHILE READ WRITE ELSEIF GTE LTE ISEQ NOTEQ
-    AND OR RETURN VAR
+    AND OR RETURN VAR MAIN
 
 %token <val> INT
 
@@ -40,7 +95,7 @@
     return var_type arr_len value set_val 
     exp as mult md factor p values params
     elseif else conditions condition conditional 
-    array func_params index arr_vals 
+    array func_params index arr_vals
 
 %start start
 
@@ -50,91 +105,155 @@
 %%
 
 start: func_decl {
-    Node* node = $1;
-    printf("s\n", node->code.c_str());
-}
-| /*empty*/ {
+    if (start) {
+        start = false;
+        printf("endfunc");
+    }
+    Node *one = new Node(); 
+    one = $1;
+    $$ = one;
+    printf("%s\n", $1->code.c_str());
+} | /*empty*/ {
+
 };
 
-statements: statement statements {
-    Node* one = $1; 
-    Node* two = $2;
+func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {
+        printf("func ");
+        Node *one = new Node();
+        one->code = $3->code;
+        printf("%s\n", one->code.c_str());
+        $$ = one;
+
+
+    /*
     
-    Node* result = new Node();
-    result->code = one->code + two->code;
-    $$ = result;
+    Node* one = $3;
+
+    Node* res = new Node();
+    res->code = "param " + $3->code;
+    $$ = res;
+    string func_name = $2;
+    add_function_to_symbol_table(func_name);
+
+    */
 }
-| /*empty*/	{
-    Node* empt = new Node();
-    $$ = empt;
+| var_type FUNCTION variable '[' params ']' '{' statements '}' func_decl {
+    printf("ADSFADSFAD");
+}
+;
+
+variable: VAR {
+    $$ = new Node();
+    $$->name = $1;
+    printf("%s ", $$->name.c_str());
 };
 
-statement: var_decl ';' {
-    Node* one = $1;
+params: var_decl ',' params {
+    printf("PARAMS 1 ");
+    Node* one = new Node;
+    one->code = "PARAMS";
     $$ = one;
 }
-| func_decl {
-    Node* one = $1;
+| var_decl {
+    printf("PARAMS -> VAR_DECL ");
+    Node* one = new Node;
+    one->code = "PARAMS 2";
     $$ = one;
 }
-| cond {
-    Node* one = $1;
-    $$ = one;
-}
-| loop {
-    Node* one = $1;
-    $$ = one;
-}
-| io ';' {
-    Node* one = $1;
-    $$ = one;
-}
-| assignment ';' {
-    Node* one = $1;
-    $$ = one;
-}
-| return ';' {
-    Node* one = $1;
-    $$ = one;
-};
+| /*empty*/ {};
 
 var_decl: var_type assignment {
-    Node* one = $1;
-    Node* ret;
+
+    printf("VAR DECL ");
+    Node* one = new Node;
+    one = $1;
+    Node* ret = new Node;
     ret->code = ". " + $1->code;
     $$ = ret;
 };
 
-values: variable {
-    Node* one = $1;
+
+
+
+statements: statement statements {
+    printf("STATEMENT 1 ");
+    Node* one = new Node;
+    one = $1; 
+    Node* two = new Node;
+    two = $2;
+    
+    Node* result = new Node();
+    result->code = one->code + two->code;
+    $$ = result;
+
+}
+| /*empty*/	{
+    /*Node* empt = new Node();
+    $$ = empt;*/
+};
+
+statement: var_decl ';' {
+    printf("STATEMENT 1 ");
+    Node* one = new Node;
+    one = $1;
     $$ = one;
+}
+| func_decl {
+   /* Node* one = new Node;
+   one = $1;
+    $$ = one;*/
+}
+| cond {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+}
+| loop {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+}
+| io ';' {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+}
+| assignment ';' {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+}
+| return ';' {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+};
+
+values: variable {
+    /*Node* one = $1;
+    $$ = one;*/
 }
 | value {
-    Node* one = $1;
-    $$ = one;
+    /*Node* one = $1;
+    $$ = one;*/
 }
 | array {
-    Node* one = $1;
-    $$ = one;
+    /*Node* one = $1;
+    $$ = one;*/
 }
-| variable '[' index {}
-| variable '(' func_params {} 
+| variable '[' index { 
+}
+| variable '(' func_params {
+
+} 
 ; 
 
 
-params: var_decl ',' params {}
-| var_decl {}
-| /*empty*/ {};
-
-func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' 
-| var_type FUNCTION variable '[' params ']' '{' statements '}' func_decl
-;
-
 return: RETURN exp {
-    Node* one = $2;
+    /*Node* one = $2;
     Node* ret = new Node();
     ret->code = "ret " + one->code;
-    $$ = ret;
+    $$ = ret;*/
 }
 ;
 
@@ -143,7 +262,9 @@ var_type: INTEGER {}
 ;
 
 assignment: values set_val {
-
+    Node* one = new Node;
+    one->code = "REACHED";
+    $$ = one;
 }
 ;
 
@@ -180,10 +301,7 @@ io: READ variable {}
 
 
 as: 
-'+' {
-    Node* one = $1;
-    $$ = one;
-} 
+'+' {} 
 | '-' {}
 ;
 
@@ -196,8 +314,6 @@ md:
 | '/' {}
 ;
 
-variable: VAR {}
-;
 
 value: INT {}
 ;
@@ -250,7 +366,6 @@ conditions: condition {}
 | condition AND conditions {}
 | condition OR conditions {}
 ;
-
 %%
 
 
