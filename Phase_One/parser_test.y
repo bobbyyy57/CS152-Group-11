@@ -72,7 +72,7 @@
     printf("--------------------\n");
     }
 
-    bool start = true;
+    bool paramFirst = false;
 
 %}
 
@@ -116,10 +116,13 @@ start: func_decl {
 
 func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {
         Node *res = new Node();
-        string varName = $3->name;
 
+        string varName = $3->name;
         res->code += "func " + varName + " \n";
 
+        Node* one = $5;
+        res->code += $5->code;
+        res->code += $8->code;
         $$ = res;
     /*
     
@@ -134,7 +137,6 @@ func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {
     */
 }
 | var_type FUNCTION variable '[' params ']' '{' statements '}' func_decl {
-    printf("ADSFADSFAD");
 }
 ;
 
@@ -143,17 +145,19 @@ variable: VAR {
     $$->name = $1;
 };
 
-params: var_decl ',' params {
-    printf("PARAMS 1 ");
-    Node* one = new Node;
-    one->code = "PARAMS";
-    $$ = one;
+params: variable ',' params {
+    Node* res = new Node;
+    Node* res2 = new Node;
+    res->code += "param " + $1->name + " \n";
+    paramFirst = true;
+    res2->code += $3->code + " \n";
+    
+    $$->code = res->code + res2->code;
 }
-| var_decl {
-    printf("PARAMS -> VAR_DECL ");
-    Node* one = new Node;
-    one->code = "PARAMS 2";
-    $$ = one;
+| variable {
+    Node* res = new Node;
+    res->code += "param " + $1->name + " \n";
+    $$ = res;
 }
 |  %empty {
     Node* node = new Node;
@@ -162,12 +166,10 @@ params: var_decl ',' params {
 };
 
 var_decl: var_type assignment {
-
-    printf("VAR DECL ");
     Node* one = new Node;
     one = $1;
     Node* ret = new Node;
-    ret->code = ". " + $1->code;
+    ret->code += ". " + $1->code;
     $$ = ret;
 };
 
@@ -175,7 +177,6 @@ var_decl: var_type assignment {
 
 
 statements: statement statements {
-    printf("STATEMENT 1 ");
     Node* one = new Node;
     one = $1; 
     Node* two = new Node;
@@ -193,7 +194,6 @@ statements: statement statements {
 };
 
 statement: var_decl ';' {
-    printf("STATEMENT 1 ");
     Node* one = new Node;
     one = $1;
     $$ = one;
