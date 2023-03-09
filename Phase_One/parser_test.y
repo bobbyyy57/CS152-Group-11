@@ -72,7 +72,9 @@
     printf("--------------------\n");
     }
 
-    bool paramFirst = false;
+    bool assDecl = false;
+    bool assAddSub = false;
+    bool assMulDiv = false;
 
 %}
 
@@ -123,18 +125,8 @@ func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {
         Node* one = $5;
         res->code += $5->code;
         res->code += $8->code;
+        res->code += "endfunc";
         $$ = res;
-    /*
-    
-    Node* one = $3;
-
-    Node* res = new Node();
-    res->code = "param " + $3->code;
-    $$ = res;
-    string func_name = $2;
-    add_function_to_symbol_table(func_name);
-
-    */
 }
 | var_type FUNCTION variable '[' params ']' '{' statements '}' func_decl {
 }
@@ -149,8 +141,7 @@ params: variable ',' params {
     Node* res = new Node;
     Node* res2 = new Node;
     res->code += "param " + $1->name + " \n";
-    paramFirst = true;
-    res2->code += $3->code + " \n";
+    res2->code += $3->code;
     
     $$->code = res->code + res2->code;
 }
@@ -166,12 +157,119 @@ params: variable ',' params {
 };
 
 var_decl: var_type assignment {
-    Node* one = new Node;
-    one = $1;
+    Node* one = $2;
     Node* ret = new Node;
-    ret->code += ". " + $1->code;
+    ret->code += ". " + $2->code + " \n";
+    $$ = ret;
+} 
+| var_type variable {
+    Node* ret = new Node;
+    ret->code += ". " + $2->code + " \n";
     $$ = ret;
 };
+
+assignment: values set_val {
+    Node* res = new Node;
+    res->code += "= " + $1->name + ", " + $2->name + " \n";
+    $$ = res;
+}
+;
+set_val: '=' exp {
+    Node* ret = new Node;
+    ret->code = $2->code;
+    $$ = ret;
+}
+| %empty {
+    Node* node = new Node;
+    $$ = node;
+};
+
+
+as: 
+'+' {
+    $$ = new Node;
+    $$->code = "+";
+} 
+| '-' {
+    $$ = new Node;
+    $$->code = "-";
+}
+;
+
+p: 
+'(' exp ')' {
+    $$ = new Node;
+    $$->code = $2->code;
+}
+;
+
+md: 
+'*' {
+    $$ = new Node;
+    $$->code = "*";
+}
+| '/' {
+    $$ = new Node;
+    $$->code = "/";
+}
+;
+
+
+value: INT {
+    $$ = new Node;
+    $$->name = $1;
+}
+;
+
+exp: exp as mult {
+    Node* res = new Node;
+    res->code += $1->code + ", " + $3->code;
+    $$ = res;
+}
+| mult {
+    $$ = new Node;
+    $$->code = $1->code;
+}
+;
+
+mult: mult md factor {
+    Node* res = new Node;
+    res->code += $1->code + ", " + $3->code;
+    $$ = res;
+}
+| factor {
+    $$ = new Node;
+    $$->code = $1->code;
+}
+;
+
+factor: p {}
+| values {
+    $$ = new Node;
+    $$->code = $1->code;
+
+}
+;
+
+values: variable {
+    Node* one = $1;
+    $$ = one;
+}
+| value {
+    Node* one = $1;
+    $$ = one;
+}
+| array {
+    /*Node* one = $1;
+    $$ = one;*/
+}
+| variable '[' index { 
+}
+| variable '(' func_params {
+
+} 
+; 
+
 
 
 
@@ -229,24 +327,6 @@ statement: var_decl ';' {
     $$ = one;*/
 };
 
-values: variable {
-    /*Node* one = $1;
-    $$ = one;*/
-}
-| value {
-    /*Node* one = $1;
-    $$ = one;*/
-}
-| array {
-    /*Node* one = $1;
-    $$ = one;*/
-}
-| variable '[' index { 
-}
-| variable '(' func_params {
-
-} 
-; 
 
 
 return: RETURN exp {
@@ -261,24 +341,13 @@ var_type: INTEGER {}
 | ARRAY var_type arr_len {}
 ;
 
-assignment: values set_val {
-    Node* one = new Node;
-    one->code = "REACHED";
-    $$ = one;
-}
-;
 
 arr_len: variable {}
 | value {}
 ;
 
 
-set_val: '=' exp{}
-| %empty {
-    Node* node = new Node;
-    $$ = node;
 
-};
 
 func_params: exp ',' func_params {}
 | exp ')' {}
@@ -301,42 +370,6 @@ index: values ']' {}
 io: READ variable {}
 | WRITE exp {}
 ;
-
-
-as: 
-'+' {} 
-| '-' {}
-;
-
-p: 
-'(' exp ')' {}
-;
-
-md: 
-'*' {}
-| '/' {}
-;
-
-
-value: INT {}
-;
-
-exp: 
-exp as mult {
-}
-| mult {
-
-}
-;
-
-mult: mult md factor {}
-| factor {}
-;
-
-factor: p {}
-| values {}
-;
-
 
 cond: IF '[' conditions ']' '{' statements '}' elseif {}
 ;
