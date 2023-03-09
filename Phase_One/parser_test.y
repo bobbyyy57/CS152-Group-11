@@ -16,6 +16,9 @@
       char* code;
       char* name;
     };*/
+
+    bool MULOP = false;
+
 %}
 
 
@@ -40,153 +43,223 @@
     array func_params index arr_vals 
 
 %start start
-%define parse.error verbose
 
 %left '+' '-'
 %left '*' '/'
 
 %%
-start: func_decl {Node *node = new Node; node->name = "hello"; $$ = node; printf("%s\n", $$->name.c_str());}
-| /*empty*/
-;
 
-statements: statement statements
-| /*empty*/
-;
+start: func_decl {
+    Node* node = $1;
+    printf("s\n", node->code.c_str());
+}
+| /*empty*/ {
+};
 
-statement: var_decl ';'
-| cond
-| loop
-| io ';'
-| assignment ';' 
-| return ';'
-;
+statements: statement statements {
+    Node* one = $1; 
+    Node* two = $2;
+    
+    Node* result = new Node();
+    result->code = one->code + two->code;
+    $$ = result;
+}
+| /*empty*/	{
+    Node* empt = new Node();
+    $$ = empt;
+};
+
+statement: var_decl ';' {
+    Node* one = $1;
+    $$ = one;
+}
+| func_decl {
+    Node* one = $1;
+    $$ = one;
+}
+| cond {
+    Node* one = $1;
+    $$ = one;
+}
+| loop {
+    Node* one = $1;
+    $$ = one;
+}
+| io ';' {
+    Node* one = $1;
+    $$ = one;
+}
+| assignment ';' {
+    Node* one = $1;
+    $$ = one;
+}
+| return ';' {
+    Node* one = $1;
+    $$ = one;
+};
+
+var_decl: var_type assignment {
+    Node* one = $1;
+    Node* ret;
+    ret->code = ". " + $1->code;
+    $$ = ret;
+};
+
+values: variable {
+    Node* one = $1;
+    $$ = one;
+}
+| value {
+    Node* one = $1;
+    $$ = one;
+}
+| array {
+    Node* one = $1;
+    $$ = one;
+}
+| variable '[' index {}
+| variable '(' func_params {} 
+; 
 
 
+params: var_decl ',' params {}
+| var_decl {}
+| /*empty*/ {};
 
-var_type: INTEGER {printf("var_type -> INTEGER\n");}
-| ARRAY var_type arr_len {printf("var_type -> ARRAY var_type arr_len");}
-;
-
-arr_len: variable {printf("arr_len -> variable\n");}
-| value {printf("arr_len -> value\n");}
-
-var_decl: var_type assignment {printf("var_decl -> var_type assignment\n");}
-;
-
-
-assignment: values set_val {printf("assignment -> values set_val\n");}
-;
-
-set_val: '=' exp {printf("set_val -> = exp\n");}
-| /*epsilon*/ {printf("set_val -> epsilon\n");}
-;
-
-exp: exp as mult {printf("exp -> exp as mult\n");}
-| mult {printf("exp -> mult\n");}
-;
-
-mult: mult md factor {printf("mult -> mult md factor\n");}
-| factor {printf("mult -> factor\n");}
-;
-
-factor: p {printf("factor -> p\n");}
-| values {printf("factor -> values\n");}
-;
-
-
-
-func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {printf("func_decl -> var_type FUNCTION variable [params] {statements}\n");}
+func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' 
 | var_type FUNCTION variable '[' params ']' '{' statements '}' func_decl
 ;
 
-params: var_decl ',' params {printf("params -> var_decl, params\n");}
-| var_decl {printf("params -> var_decl\n");}
-| /*empty*/ {printf("params -> epsilon\n");}
+return: RETURN exp {
+    Node* one = $2;
+    Node* ret = new Node();
+    ret->code = "ret " + one->code;
+    $$ = ret;
+}
+;
+
+var_type: INTEGER {}
+| ARRAY var_type arr_len {}
+;
+
+assignment: values set_val {
+
+}
+;
+
+arr_len: variable {}
+| value {}
 ;
 
 
-
-cond: IF '[' conditions ']' '{' statements '}' elseif {printf("cond -> IF [conditions] {statements} elseif\n");}
+set_val: '=' exp{}
+| /*epsilon*/ {}
 ;
 
-elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif {printf("elseif -> ELSEIF [conditions] {statements} elseif\n");}
-| else {printf("elseif -> else\n");}
-;
-else: ELSE '{' statements '}' {printf("else -> ELSE {statements}\n");}
-| /*empty*/ {printf("else -> epsilon\n");}
-; 
-
-loop: WHILE '[' conditions ']' '{' statements '}' {printf("loop -> WHILE [conditions] {statements}\n");}
-;
-
-conditions: condition {printf("conditions -> condition\n");}
-| condition AND conditions {printf("conditions -> condition AND conditions\n");}
-| condition OR conditions {printf("conditions -> condition OR conditions\n");}
-;
-
-condition: condition conditional exp {printf("condition -> condition conditiional exp\n");}
-| exp {printf("condition -> exp\n");}
-| '(' condition conditional exp ')' {printf("condition -> (condition conditional exp)\n");} 
-;
-
-conditional: '>' {printf("conditional -> >\n");}
-| '<' {printf("conditional -> <\n");}
-| GTE {printf("conditional -> GTE\n");}
-| LTE {printf("conditional -> LTE\n");}
-| ISEQ {printf("conditional -> ISEQ\n");}
-| NOTEQ {printf("conditional -> NOTEQ\n");}
-;
-
-io: READ variable {printf("io -> READ variable\n");}
-| WRITE exp {printf("io -> WRITE exp\n");}
+func_params: exp ',' func_params {}
+| exp ')' {}
+| ')' {}
 ;
 
 
-
-return: RETURN exp {printf("return -> RETURN exp\n");}
+array: '{' arr_vals '}' {}
+| '{' '}' {}
 ;
 
+arr_vals: values ',' arr_vals {}
+| values {}
+;
+
+index: values ']' {}
+;
 
 
-values: variable {printf("values -> variable\n");}
-| value {printf("values -> value\n");}
-| array {printf("values -> array\n");}
-| variable '[' index {printf("values -> '[' index\n");}
-| variable '(' func_params {printf("values -> '(' func_params\n");}
-; 
-func_params: exp ',' func_params {printf("func_params: exp, func_params\n");}
-| exp ')' {printf("func_params -> exp)\n");}
-| ')' {printf("func_params -> ')'\n");} 
+io: READ variable {}
+| WRITE exp {}
 ;
-p: '(' exp ')' {printf("p -> (exp)\n");}
+
+
+as: 
+'+' {
+    Node* one = $1;
+    $$ = one;
+} 
+| '-' {}
 ;
-md: '*' {printf("md -> *\n");}
-|'/' {printf("md -> /\n");}
+
+p: 
+'(' exp ')' {}
 ;
-as: '+' {printf("as -> +\n");}
-| '-' {printf("as -> -\n");}
+
+md: 
+'*' {}
+| '/' {}
 ;
-variable: VAR {$$ = new Node;}
+
+variable: VAR {}
 ;
-index: values ']' {printf("index -> values ]\n");}
-;
+
 value: INT {}
 ;
-array: '{' arr_vals '}' {printf("array -> {arr_vals}\n");}
-| '{' '}' {printf("array -> {}\n");}
+
+exp: 
+exp as mult {
+}
+| mult {
+
+}
 ;
-arr_vals: values ',' arr_vals {printf("arr_vals -> values, arr_vals\n");}
-| values {printf("arr_vals -> values\n");}
+
+mult: mult md factor {}
+| factor {}
 ;
+
+factor: p {}
+| values {}
+;
+
+
+cond: IF '[' conditions ']' '{' statements '}' elseif {}
+;
+
+elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif{}
+| else{}
+;
+else: ELSE '{' statements '}' {}
+| /*empty*/ {}
+;
+
+loop: WHILE '[' conditions ']' '{' statements '}' {}
+;
+
+condition: condition conditional exp {}
+| exp {}
+| '(' condition conditional exp ')' {}
+;
+
+conditional: '>' {}
+| '<' {}
+| GTE {}
+| LTE {}
+| ISEQ {}
+| NOTEQ {}
+;
+
+
+conditions: condition {}
+| condition AND conditions {}
+| condition OR conditions {}
+;
+
 %%
 
-int main(int argc, char *argv[]) {
-    if (argc > 1) yyin = fopen(argv[1], "r");
-    else yyin = stdin;
 
+int main (int argc, char** argv) {
+  yyin = stdin;
+
+  do {
     yyparse();
-    //printf("s\n", $$);
-    return 0;
+  } while(!feof(yyin));
+  return 0;
 }
 
