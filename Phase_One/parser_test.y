@@ -105,26 +105,22 @@
 %%
 
 start: func_decl {
-    if (start) {
-        start = false;
-        printf("endfunc");
-    }
-    Node *one = new Node(); 
-    one = $1;
+    Node *one = $1;
     $$ = one;
     printf("%s\n", $1->code.c_str());
-} | /*empty*/ {
+} | %empty {
+    Node* node = new Node;
+    $$ = node;
 
 };
 
 func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {
-        printf("func ");
-        Node *one = new Node();
-        one->code = $3->code;
-        printf("%s\n", one->code.c_str());
-        $$ = one;
+        Node *res = new Node();
+        string varName = $3->name;
 
+        res->code += "func " + varName + " \n";
 
+        $$ = res;
     /*
     
     Node* one = $3;
@@ -145,7 +141,6 @@ func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {
 variable: VAR {
     $$ = new Node();
     $$->name = $1;
-    printf("%s ", $$->name.c_str());
 };
 
 params: var_decl ',' params {
@@ -160,7 +155,11 @@ params: var_decl ',' params {
     one->code = "PARAMS 2";
     $$ = one;
 }
-| /*empty*/ {};
+|  %empty {
+    Node* node = new Node;
+    $$ = node;
+
+};
 
 var_decl: var_type assignment {
 
@@ -187,9 +186,10 @@ statements: statement statements {
     $$ = result;
 
 }
-| /*empty*/	{
-    /*Node* empt = new Node();
-    $$ = empt;*/
+|  %empty {
+    Node* node = new Node;
+    $$ = node;
+
 };
 
 statement: var_decl ';' {
@@ -274,8 +274,11 @@ arr_len: variable {}
 
 
 set_val: '=' exp{}
-| /*epsilon*/ {}
-;
+| %empty {
+    Node* node = new Node;
+    $$ = node;
+
+};
 
 func_params: exp ',' func_params {}
 | exp ')' {}
@@ -342,8 +345,11 @@ elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif{}
 | else{}
 ;
 else: ELSE '{' statements '}' {}
-| /*empty*/ {}
-;
+| %empty {
+    Node* node = new Node;
+    $$ = node;
+
+};
 
 loop: WHILE '[' conditions ']' '{' statements '}' {}
 ;
