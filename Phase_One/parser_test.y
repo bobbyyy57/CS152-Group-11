@@ -159,18 +159,18 @@ params: variable ',' params {
 var_decl: var_type assignment {
     Node* one = $2;
     Node* ret = new Node;
-    ret->code += ". " + $2->code + " \n";
+    ret->code += ". " + $2->name + " \n";
     $$ = ret;
 } 
 | var_type variable {
     Node* ret = new Node;
-    ret->code += ". " + $2->code + " \n";
+    ret->code += ". " + $2->name + " \n";
     $$ = ret;
 };
 
 assignment: values set_val {
     Node* res = new Node;
-    res->code += "= " + $1->name + ", " + $2->name + " \n";
+    res->code += "= " + $1->name + ", " + $2->code + " \n";
     $$ = res;
 }
 ;
@@ -214,13 +214,6 @@ md:
 }
 ;
 
-
-value: INT {
-    $$ = new Node;
-    $$->name = $1;
-}
-;
-
 exp: exp as mult {
     Node* res = new Node;
     res->code += $1->code + ", " + $3->code;
@@ -248,6 +241,12 @@ factor: p {}
     $$ = new Node;
     $$->code = $1->code;
 
+}
+;
+
+value: INT {
+    $$ = new Node;
+    $$->code = "FIX FIX FIX";
 }
 ;
 
