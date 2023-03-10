@@ -62,8 +62,9 @@ extern int yydebug;
     AND = 272,
     OR = 273,
     RETURN = 274,
-    INT = 275,
-    VAR = 276
+    VAR = 275,
+    MAIN = 276,
+    INT = 277
   };
 #endif
 
@@ -72,12 +73,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 13 "parser2.y" /* yacc.c:1909  */
+#line 82 "parser_test.y" /* yacc.c:1909  */
 
     int val;
     char* name;
+    struct Node* cn;
 
-#line 81 "y.tab.h" /* yacc.c:1909  */
+#line 83 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
