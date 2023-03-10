@@ -3,7 +3,12 @@
     extern int yylex();
    
     #include <stdio.h>
+    #include <string>
+    #include <vector>
+    #include <string.h>
     #include "Node.h"
+    #include <sstream>
+    using namespace std;
     
     extern FILE* yyin;
     extern int row, col;
@@ -12,10 +17,75 @@
         printf("ERROR: Row %d, Col %d, %s\n", row, col, msg);
     }
 
-    /*struct CodeNode {
-      char* code;
-      char* name;
-    };*/
+    enum Type { Integer, Array };
+    struct Symbol {
+    string name;
+    Type type;
+    };
+    struct Function {
+    string name;
+    vector<Symbol> declarations;
+    };
+
+    vector <Function> symbol_table;
+
+    
+
+    template <typename T>
+    std::string NumberToString ( T Number )
+    {
+        std::ostringstream ss;
+        ss << Number;
+        return ss.str();
+    }
+
+
+    Function *get_function() {
+    int last = symbol_table.size()-1;
+    return &symbol_table[last];
+    }
+
+    bool find(string &value) {
+    Function *f = get_function();
+    for(int i=0; i < f->declarations.size(); i++) {
+        Symbol *s = &f->declarations[i];
+        if (s->name == value) {
+        return true;
+        }
+    }
+    return false;
+    }
+
+    void add_function_to_symbol_table(string &value) {
+    Function f; 
+    f.name = value; 
+    symbol_table.push_back(f);
+    }
+
+    void add_variable_to_symbol_table(string &value, Type t) {
+    Symbol s;
+    s.name = value;
+    s.type = t;
+    Function *f = get_function();
+    f->declarations.push_back(s);
+    }
+
+    void print_symbol_table(void) {
+    printf("symbol table:\n");
+    printf("--------------------\n");
+    for(int i=0; i<symbol_table.size(); i++) {
+        printf("function: %s\n", symbol_table[i].name.c_str());
+        for(int j=0; j<symbol_table[i].declarations.size(); j++) {
+        printf("  locals: %s\n", symbol_table[i].declarations[j].name.c_str());
+        }
+    }
+    printf("--------------------\n");
+    }
+
+    bool assDecl = false;
+    bool assAddSub = false;
+    bool assMulDiv = false;
+
 %}
 
 
@@ -28,7 +98,7 @@
 %token <name>
     INTEGER STRING ARRAY FUNCTION IF ELSE
     WHILE READ WRITE ELSEIF GTE LTE ISEQ NOTEQ
-    AND OR RETURN VAR
+    AND OR RETURN VAR MAIN
 
 %token <val> INT
 
@@ -37,156 +107,327 @@
     return var_type arr_len value set_val 
     exp as mult md factor p values params
     elseif else conditions condition conditional 
-    array func_params index arr_vals 
+    array func_params index arr_vals
 
 %start start
-%define parse.error verbose
 
 %left '+' '-'
 %left '*' '/'
 
 %%
-start: func_decl {Node *node = new Node; node->name = "hello"; $$ = node; printf("%s\n", $$->name.c_str());}
-| /*empty*/
+
+start: func_decl {
+    Node *one = $1;
+    $$ = one;
+    printf("%s\n", $1->code.c_str());
+} | %empty {
+    Node* node = new Node;
+    $$ = node;
+
+};
+
+func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {
+        Node *res = new Node();
+
+        string varName = $3->name;
+        res->code += "func " + varName + " \n";
+
+        Node* one = $5;
+        res->code += $5->code;
+        res->code += $8->code;
+        res->code += "endfunc";
+        $$ = res;
+}
+| var_type FUNCTION variable '[' params ']' '{' statements '}' func_decl {
+}
 ;
 
-statements: statement statements
-| /*empty*/
+variable: VAR {
+    $$ = new Node;
+    $$->name = $1;
+};
+
+params: variable ',' params {
+    Node* res = new Node;
+    Node* res2 = new Node;
+    res->code += "param " + $1->name + " \n";
+    res2->code += $3->code;
+    
+    $$->code = res->code + res2->code;
+}
+| variable {
+    Node* res = new Node;
+    res->code += "param " + $1->name + " \n";
+    $$ = res;
+}
+|  %empty {
+    Node* node = new Node;
+    $$ = node;
+
+};
+
+var_decl: var_type assignment {
+    Node* one = $2;
+    Node* ret = new Node;
+    ret->code += ". " + $2->name + " \n";
+    $$ = ret;
+} 
+| var_type variable {
+    Node* ret = new Node;
+    ret->code += ". " + $2->name + " \n";
+    $$ = ret;
+};
+
+assignment: values set_val {
+    Node* res = new Node;
+    res->code += $2->code;
+    res->code += "= " + $1->name + ", " + $2->name + " \n";
+    $$ = res;
+}
+;
+set_val: '=' exp {
+    $$=$2;
+}
+| %empty {
+    Node* node = new Node;
+    $$ = node;
+};
+
+
+as: 
+'+' {
+    $$ = new Node;
+    $$->name = "+";
+} 
+| '-' {
+    $$ = new Node;
+    $$->name = "-";
+}
 ;
 
-statement: var_decl ';'
-| cond
-| loop
-| io ';'
-| assignment ';' 
-| return ';'
+p: 
+'(' exp ')' {
+    $$ = new Node;
+    $$->code = $2->code;
+}
 ;
 
-
-
-var_type: INTEGER {printf("var_type -> INTEGER\n");}
-| ARRAY var_type arr_len {printf("var_type -> ARRAY var_type arr_len");}
+md: 
+'*' {
+    $$ = new Node;
+    $$->name = "*";
+}
+| '/' {
+    $$ = new Node;
+    $$->name = "/";
+}
 ;
 
-arr_len: variable {printf("arr_len -> variable\n");}
-| value {printf("arr_len -> value\n");}
-
-var_decl: var_type assignment {printf("var_decl -> var_type assignment\n");}
+exp: exp as mult {
+    Node* res = new Node;
+    res->name="_temp0";
+    res->code += ". " + res->name + " \n";	
+    res->code += $2->name + " " +  res->name + ", " + $1->name + ", " + $3->name + " \n";
+    $$ = res;
+}
+| mult {
+    $$ = $1;
+}
 ;
 
+mult: mult md factor {
+    Node* res = new Node;
+    res->name="temp0";
+    res->code += $2->name + "," + res->name + ", " + $1->name + ", " + $3->name + " \n";
+    $$ = res;
 
-assignment: values set_val {printf("assignment -> values set_val\n");}
+}
+| factor {
+    $$ = $1;
+}
 ;
 
-set_val: '=' exp {printf("set_val -> = exp\n");}
-| /*epsilon*/ {printf("set_val -> epsilon\n");}
+factor: p {}
+| values {
+    $$ = $1;
+}
 ;
 
-exp: exp as mult {printf("exp -> exp as mult\n");}
-| mult {printf("exp -> mult\n");}
+value: INT {
+    $$ = new Node;
+    $$->name = NumberToString($1);
+}
 ;
 
-mult: mult md factor {printf("mult -> mult md factor\n");}
-| factor {printf("mult -> factor\n");}
-;
+values: variable {
+    Node* one = $1;
+    $$ = one;
+}
+| value {
+    Node* one = $1;
+    $$ = one;
+}
+| array {
+    /*Node* one = $1;
+    $$ = one;*/
+}
+| variable '[' index { 
+}
+| variable '(' func_params {
 
-factor: p {printf("factor -> p\n");}
-| values {printf("factor -> values\n");}
-;
-
-
-
-func_decl: var_type FUNCTION variable '[' params ']' '{' statements '}' {printf("func_decl -> var_type FUNCTION variable [params] {statements}\n");}
-| var_type FUNCTION variable '[' params ']' '{' statements '}' func_decl
-;
-
-params: var_decl ',' params {printf("params -> var_decl, params\n");}
-| var_decl {printf("params -> var_decl\n");}
-| /*empty*/ {printf("params -> epsilon\n");}
-;
-
-
-
-cond: IF '[' conditions ']' '{' statements '}' elseif {printf("cond -> IF [conditions] {statements} elseif\n");}
-;
-
-elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif {printf("elseif -> ELSEIF [conditions] {statements} elseif\n");}
-| else {printf("elseif -> else\n");}
-;
-else: ELSE '{' statements '}' {printf("else -> ELSE {statements}\n");}
-| /*empty*/ {printf("else -> epsilon\n");}
+} 
 ; 
 
-loop: WHILE '[' conditions ']' '{' statements '}' {printf("loop -> WHILE [conditions] {statements}\n");}
-;
-
-conditions: condition {printf("conditions -> condition\n");}
-| condition AND conditions {printf("conditions -> condition AND conditions\n");}
-| condition OR conditions {printf("conditions -> condition OR conditions\n");}
-;
-
-condition: condition conditional exp {printf("condition -> condition conditiional exp\n");}
-| exp {printf("condition -> exp\n");}
-| '(' condition conditional exp ')' {printf("condition -> (condition conditional exp)\n");} 
-;
-
-conditional: '>' {printf("conditional -> >\n");}
-| '<' {printf("conditional -> <\n");}
-| GTE {printf("conditional -> GTE\n");}
-| LTE {printf("conditional -> LTE\n");}
-| ISEQ {printf("conditional -> ISEQ\n");}
-| NOTEQ {printf("conditional -> NOTEQ\n");}
-;
-
-io: READ variable {printf("io -> READ variable\n");}
-| WRITE exp {printf("io -> WRITE exp\n");}
-;
 
 
 
-return: RETURN exp {printf("return -> RETURN exp\n");}
+
+statements: statement statements {
+    Node* one = new Node;
+    one = $1; 
+    Node* two = new Node;
+    two = $2;
+    
+    Node* result = new Node();
+    result->code = one->code + two->code;
+    $$ = result;
+
+}
+|  %empty {
+    Node* node = new Node;
+    $$ = node;
+
+};
+
+statement: var_decl ';' {
+    Node* one = new Node;
+    one = $1;
+    $$ = one;
+}
+| func_decl {
+   /* Node* one = new Node;
+   one = $1;
+    $$ = one;*/
+}
+| cond {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+}
+| loop {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+}
+| io ';' {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+}
+| assignment ';' {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+}
+| return ';' {
+    /*Node* one = new Node;
+    one = $1;
+    $$ = one;*/
+};
+
+
+
+return: RETURN exp {
+    /*Node* one = $2;
+    Node* ret = new Node();
+    ret->code = "ret " + one->code;
+    $$ = ret;*/
+}
+;
+
+var_type: INTEGER {}
+| ARRAY var_type arr_len {}
+;
+
+
+arr_len: variable {}
+| value {}
 ;
 
 
 
-values: variable {printf("values -> variable\n");}
-| value {printf("values -> value\n");}
-| array {printf("values -> array\n");}
-| variable '[' index {printf("values -> '[' index\n");}
-| variable '(' func_params {printf("values -> '(' func_params\n");}
-; 
-func_params: exp ',' func_params {printf("func_params: exp, func_params\n");}
-| exp ')' {printf("func_params -> exp)\n");}
-| ')' {printf("func_params -> ')'\n");} 
+
+func_params: exp ',' func_params {}
+| exp ')' {}
+| ')' {}
 ;
-p: '(' exp ')' {printf("p -> (exp)\n");}
+
+
+array: '{' arr_vals '}' {}
+| '{' '}' {}
 ;
-md: '*' {printf("md -> *\n");}
-|'/' {printf("md -> /\n");}
+
+arr_vals: values ',' arr_vals {}
+| values {}
 ;
-as: '+' {printf("as -> +\n");}
-| '-' {printf("as -> -\n");}
+
+index: values ']' {}
 ;
-variable: VAR {$$ = new Node;}
+
+
+io: READ variable {}
+| WRITE exp {
+    Node* res = new Node;
+    res->name = $2->name;
+    res->code += ".> " + $2->code + " \n";
+    $$ = res;
+
+}
 ;
-index: values ']' {printf("index -> values ]\n");}
+
+cond: IF '[' conditions ']' '{' statements '}' elseif {}
 ;
-value: INT {}
+
+elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif{}
+| else{}
 ;
-array: '{' arr_vals '}' {printf("array -> {arr_vals}\n");}
-| '{' '}' {printf("array -> {}\n");}
+else: ELSE '{' statements '}' {}
+| %empty {
+    Node* node = new Node;
+    $$ = node;
+
+};
+
+loop: WHILE '[' conditions ']' '{' statements '}' {}
 ;
-arr_vals: values ',' arr_vals {printf("arr_vals -> values, arr_vals\n");}
-| values {printf("arr_vals -> values\n");}
+
+condition: condition conditional exp {}
+| exp {}
+| '(' condition conditional exp ')' {}
+;
+
+conditional: '>' {}
+| '<' {}
+| GTE {}
+| LTE {}
+| ISEQ {}
+| NOTEQ {}
+;
+
+
+conditions: condition {}
+| condition AND conditions {}
+| condition OR conditions {}
 ;
 %%
 
-int main(int argc, char *argv[]) {
-    if (argc > 1) yyin = fopen(argv[1], "r");
-    else yyin = stdin;
 
+int main (int argc, char** argv) {
+  yyin = stdin;
+
+  do {
     yyparse();
-    //printf("s\n", $$);
-    return 0;
+  } while(!feof(yyin));
+  return 0;
 }
 

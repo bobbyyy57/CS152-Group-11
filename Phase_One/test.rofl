@@ -1,0 +1,9 @@
+:1234::symbols: main [] {
+    :1234: a;
+    :1234: b;
+    :1234: c;	
+    a :point_right: :one::zero::zero:;
+    b :point_right: :five::zero:;
+    c :point_right: a :heavy_plus_sign: b;
+    :desktop_computer: c;
+}
