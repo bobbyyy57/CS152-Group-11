@@ -7,7 +7,7 @@
     #include <vector>
     #include <string.h>
     #include "Node.h"
-
+    #include <sstream>
     using namespace std;
     
     extern FILE* yyin;
@@ -28,6 +28,16 @@
     };
 
     vector <Function> symbol_table;
+
+    
+
+    template <typename T>
+    std::string NumberToString ( T Number )
+    {
+        std::ostringstream ss;
+        ss << Number;
+        return ss.str();
+    }
 
 
     Function *get_function() {
@@ -240,13 +250,12 @@ factor: p {}
 | values {
     $$ = new Node;
     $$->code = $1->code;
-
 }
 ;
 
 value: INT {
     $$ = new Node;
-    $$->code = "FIX FIX FIX";
+    $$->code = NumberToString($1);
 }
 ;
 
