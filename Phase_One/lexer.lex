@@ -1,7 +1,7 @@
 %{
 #include "y.tab.h"
 int row = 0, col = 0;
-int toInt(char*);
+char* toInt(char*);
 %}
 
 ALPHA [a-zA-Z]
@@ -12,7 +12,7 @@ NUM [0-9]
 
 ":pencil2:"([^\n])*             {col += strlen(yytext);}
 {ALPHA}+ 	               	 	{yylval.name = strdup(yytext); col += strlen(yytext); return VAR;}
-{INTEGER}+                      {yylval.val = toInt(yytext); col += strlen(yytext); return INT;}
+{INTEGER}+                      {yylval.name = toInt(yytext); col += strlen(yytext); return INT;}
 
 
 {NUM}+                          {printf("INT %s\n", yytext); col += strlen(yytext);}
@@ -37,7 +37,6 @@ NUM [0-9]
 
 
 ":symbols:"                     {col += strlen(yytext); return FUNCTION;}
-"main"                     		{col += strlen(yytext); return MAIN;}
 ":arrow_forward:"               {col += strlen(yytext); return '>';}
 ":arrow_backward:"              {col += strlen(yytext); return '<';}
 ":vertical_traffic_light:"      {col += strlen(yytext); return IF;}
@@ -74,13 +73,14 @@ NUM [0-9]
 
 
 
-int toInt(char* input) {
-	int toReturn = 0;
+char* toInt(char* input) {
+	char* toReturn = new char[32];
+	int retInd = 0;
 
-	char currNum[5];
+	char currNum[6];
+	currNum[5] = '\0';
 
 	int reading = 0;
-	int toMult = 0;
 	int currInd = 0;
 	size_t i = 0;
 
@@ -88,7 +88,6 @@ int toInt(char* input) {
 		if (input[i] == ':') {
 			if (!reading) {
 				reading = 1;
-				toMult = 0;
 				currInd = 0;
 				size_t j = 0;
 				for (; j < 5; j++) currNum[j] = '\0';
@@ -96,44 +95,43 @@ int toInt(char* input) {
 			else {
 				reading = 0;
 				if (!strcmp(currNum, "zero")) {
-					toMult = 0;
+					toReturn[retInd++] = '0';
 				}
 				else if (!strcmp(currNum, "one")) {
-					toMult = 1;
+					toReturn[retInd++] = '1';
 				}
 				else if (!strcmp(currNum, "two")) {
-					toMult = 2;
+					toReturn[retInd++] = '2';
 				}
 				else if (!strcmp(currNum, "three")) {
-					toMult = 3;
+					toReturn[retInd++] = '3';
 				}
 				else if (!strcmp(currNum, "four")) {
-					toMult = 4;
+					toReturn[retInd++] = '4';
 				}
 				else if (!strcmp(currNum, "five")) {
-                                        toMult = 5;
+                                        toReturn[retInd++] = '5';
                                 }
 				else if (!strcmp(currNum, "six")) {
-                                        toMult = 6;
-                                }
+                                        toReturn[retInd++] = '6';
+				}
 				else if (!strcmp(currNum, "seven")) {
-                                        toMult = 7;
+                                        toReturn[retInd++] = '7';
                                 }
 				else if (!strcmp(currNum, "eight")) {
-                                        toMult = 8;
+                                        toReturn[retInd++] = '8';
                                 }
 				else if (!strcmp(currNum, "nine")) {
-                                        toMult = 9;
+                                        toReturn[retInd++] = '9';
                                 }
-				toReturn *= 10;
-				toReturn += toMult;
 			}
 			continue;
 		}
 		else {
 			currNum[currInd++] = input[i];
 		}
-	} 
+	}
+	toReturn[retInd] = '\0'; 
 	return toReturn;	
 }
 

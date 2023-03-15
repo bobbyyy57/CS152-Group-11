@@ -1,0 +1,21 @@
+:1234::symbols:add[:1234:a,:1234:b]{
+    :athletic_shoe:a:heavy_plus_sign:b;
+}
+
+:1234::symbols:mult[:1234:a,:1234:b] {
+    :athletic_shoe: a:heavy_multiplication_x:b;
+}
+
+:1234::symbols:main[]{
+    :1234:a;
+    :1234:b;
+    :1234:c;
+    :1234:d;
+
+    a:point_right::one::zero::zero:;
+    b:point_right::five::zero:;
+    c:point_right:add(a, b);
+    :desktop_computer: c;
+    d:point_right:mult(c, a:heavy_plus_sign:b);
+    :desktop_computer:d;
+}

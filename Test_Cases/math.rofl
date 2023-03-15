@@ -1,0 +1,23 @@
+:1234::symbols:main[] {
+  :1234:a;
+  :1234:b;
+  :1234:c;
+  a:point_right::one::zero::zero:;
+  b:point_right::five::zero:;
+ 
+  :pencil2: Addition, answer is 150, since 150 := 100+50
+  c:point_right:a:heavy_plus_sign:b;
+  :desktop_computer: c;
+
+  :pencil2: Subtraction, answer is 50, since 50 := 100-50
+  c:point_right:a:heavy_minus_sign:b;
+  :desktop_computer:c;
+
+  :pencil2: Multiplication, answer is 5000, since 5000 := 100 * 50
+  c:point_right:a:heavy_multiplication_x:b;
+  :desktop_computer:c;
+
+  :pencil2: Division, answer is 2, since 2 := 100/50
+  c:point_right:a:heavy_division_sign:b;
+  :desktop_computer:c;
+}

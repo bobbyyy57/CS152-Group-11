@@ -1,16 +1,17 @@
-:pencil2: initializing array
-:card_index::1234::three: array;
-
-:pencil2: initializing each element of array
-array[:zero:]:point_right::eight:;
-array[:one:]:point_right::three:;
-array[:two:]:point_right::zero:;
-
-:pencil2: print out each element
-:desktop_computer:array[:zero:];
-:desktop_computer:array[:one:];
-:desktop_computer:array[:two:];
-
-:pencil2: printing out the sum of 0 and 2
-:desktop_computer: array[:zero:]:heavy_plus_sign:array[:two:];
+:1234::symbols:main[]{
+    :card_index::1234::two::zero: a;
+    :1234:b;
+    :1234:c;
+    b:point_right::three:;
+    c:point_right::five:;
+    a[:zero:] :point_right: b:heavy_plus_sign:c;
+    a[:zero:] :point_right: b:heavy_plus_sign:c;
+    :desktop_computer:a[:zero:];
+    a[:one:]:point_right::one::zero::zero:;
+    :desktop_computer:a[:one:];
+    a[:two:]:point_right::two::zero::zero:;
+    :desktop_computer:a[:two:];
+    a[:three:]:point_right:a[:zero:]:heavy_multiplication_x:(a[:one:]:heavy_plus_sign:c);
+    :desktop_computer:a[:three:];
+}
 
