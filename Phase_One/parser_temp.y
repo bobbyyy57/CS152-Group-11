@@ -180,10 +180,12 @@ assignment: named_values set_val {
     node->code += $1->code;
 
 //node->code += "named_values-type: " + typeof($1) + " " + "set_val: " + $2->name + "\n";
-    if ($1->type == Integer) node->code += "= " + $1->name + ", " + $2->name + "\n";
-    else {
+    if ($1->type == Array) {
       node->code += "[]= " + $1->name + ", " + $1->index + ", " + $2->name + "\n";
-      }
+    }
+    else {
+      node->code += "= " + $1->name + ", " + $2->name + "\n";
+    }
   }
   $$ = node; 
 }
@@ -313,9 +315,7 @@ cond: IF '[' conditions ']' '{' statements '}' elseif {
     node->code += ": " + node->name + "\n";
   }
 
-
-
-  node->code += $6->code + $8->code;
+  node->code += $6->code; //+ $8->code;
   node->code += ":= endif\n";
   $$ = node;
 }
