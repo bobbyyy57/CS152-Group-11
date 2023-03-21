@@ -309,6 +309,9 @@ cond: IF '[' conditions ']' '{' statements '}' elseif {
   node->code = cond->code;
   node->code += "?:= " + node->name + ", " + cond->name + "\n"; 
 
+  if (strlen($8->name.c_str()) <= 0) { 
+    node->code += ": " + node->name + "\n";
+  }
 
 
 
