@@ -178,8 +178,13 @@ assignment: named_values set_val {
   if (strlen($2->name.c_str()) > 0) {
     node->code = $2->code;
     node->code += $1->code;
-    if ($1->type == Integer) node->code += "= " + $1->name + ", " + $2->name + "\n";
-    else {node->code += "[]= " + $1->name + ", " + $1->index + ", " + $2->name + "\n";}
+
+    if ($1->type == Array) {
+      node->code += "[]= " + $1->name + ", " + $1->index + ", " + $2->name + "\n";
+    }
+    else {
+      node->code += "= " + $1->name + ", " + $2->name + "\n";
+    }
   }
   $$ = node; 
 }
@@ -275,38 +280,137 @@ params_temp: var_type variable {
 };
 
 
+loop: WHILE '[' conditions ']' '{' statements '}' {
+  Node* node = new Node;
+  Node* loop = new Node;
 
-cond: IF '[' conditions ']' '{' statements '}' elseif {
-  printf("We not know how do cond!\n");
+  loop->name = "loopbody0";
+  node->name = "beginloop0";
+  node->code = ": " + node->name + "\n";
+  
+  Node* cond = new Node;
+  cond = $3;
+
+  node->code += cond->code;
+  node->code += "?:= " + loop->name + ", " + cond->name + "\n"; 
+
+  node->code += ":= endloop0\n";
+  node->code += loop->name + " \n";
+
+  node->code += $6->code;
+
+  node->code += ":= beginloop0\n";
+  node->code += ": endloop0\n";
+
+  $$ = node;
+};
+
+conditions: condition { 
+  $$ = $1;
+}
+| condition AND conditions {
+  Node* emp = new Node;
+  $$ = emp;
+}
+| condition OR conditions {
+  Node* emp = new Node;
+  $$ = emp;
+};
+
+condition: condition conditional exp {
+  Node* res = new Node;
+
+  res->name = "iftemp";
+  res->code += ". " + res->name + "\n";
+  res->code += $2->name + " " + res->name + ", " + $1->name + ", " + $3->name + "\n";
+  $$ = res;
+}
+| exp {
+  $$ = $1;
+}
+| '(' condition conditional exp ')' {
+  Node* emp = new Node;
+  $$ = emp;
 }
 ;
 
-elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif {printf("elseif -> ELSEIF [conditions] {statements} elseif\n");}
-| else {printf("elseif -> else\n");}
-;
-else: ELSE '{' statements '}' {printf("else -> ELSE {statements}\n");}
-| /*empty*/ {printf("else -> epsilon\n");}
-; 
 
-loop: WHILE '[' conditions ']' '{' statements '}' {printf("loop -> WHILE [conditions] {statements}\n");}
+cond: IF '[' conditions ']' '{' statements '}' elseif {
+  Node* node = new Node;
+  Node* cond = new Node;
+  cond = $3;
+
+  node->name = "if_true0";
+  node->code = cond->code;
+  node->code += "?:= " + node->name + ", " + cond->name + "\n"; 
+
+  if (strlen($8->name.c_str()) <= 0) { 
+    node->code += ": " + node->name + "\n";
+    node->code += $6->code;
+    node->code += ":= endif\n";
+  }
+  else {
+    node->code += ":= " + $8->name + "\n";
+    node->code += ": " + node->name + "\n";
+    node->code += $6->code;
+    node->code += ":= endif\n";
+    node->code += $8->code;
+  }
+
+  node->code += ": endif\n";
+
+  $$ = node;
+}
 ;
 
-conditions: condition {printf("conditions -> condition\n");}
-| condition AND conditions {printf("conditions -> condition AND conditions\n");}
-| condition OR conditions {printf("conditions -> condition OR conditions\n");}
+
+
+elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif {
+  Node* emp = new Node;
+  $$ = emp;
+}
+| else {
+  $$ = $1;
+}
 ;
 
-condition: condition conditional exp {printf("condition -> condition conditiional exp\n");}
-| exp {printf("condition -> exp\n");}
-| '(' condition conditional exp ')' {printf("condition -> (condition conditional exp)\n");} 
+else: ELSE '{' statements '}' {
+  Node* node = new Node;
+  node->name = "else0";
+  node->code = $3->code;
+  $$ = node;
+}
+| /*empty*/ {
+  Node* emp = new Node;
+  $$ = emp;
+}
 ;
 
-conditional: '>' {$$ = new Node; $$->name = ">";}
-| '<' {printf("conditional -> <\n");}
-| GTE {printf("conditional -> GTE\n");}
-| LTE {printf("conditional -> LTE\n");}
-| ISEQ {printf("conditional -> ISEQ\n");}
-| NOTEQ {printf("conditional -> NOTEQ\n");}
+
+conditional: '>' {
+  $$ = new Node;
+  $$->name = ">";
+}
+| '<' {
+  $$ = new Node;
+  $$->name = "<";
+}
+| GTE {
+  $$ = new Node;
+  $$->name = ">=";
+}
+| LTE {
+  $$ = new Node;
+  $$->name = "<=";
+}
+| ISEQ {
+  $$ = new Node;
+  $$->name = "==";
+}
+| NOTEQ {
+  $$ = new Node;
+  $$->name = "!=";
+}
 ;
 
 io: READ variable {
