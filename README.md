@@ -50,7 +50,7 @@
 | `:vertical_traffic_light:` | 🚦 | IF |
 | `:traffic_light:` | 🚥 | ELSE |
 | `:desktop_computer:` | 🖥️ | READ |
-| `:pencil1:`| ✏️| COMMENT|
+| `:pencil2:`| :pencil2: | COMMENT|
 | `:keyboard:` | ⌨️ | WRITE |
 | `:athletic_shoe:` | :athletic_shoe: | RETURN |
 | `:skull:` | :skull: | BREAK |
