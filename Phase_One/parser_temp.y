@@ -38,15 +38,15 @@ Function *get_function() {
   return &symbol_table[last];
 }
 
-bool find(std::string &value) {
+int find(std::string &value) {
   Function *f = get_function();
   for(int i=0; i < f->declarations.size(); i++) {
     Symbol *s = &f->declarations[i];
     if (s->name == value) {
-      return true;
+      return s->type;
     }
   }
-  return false;
+  return -1;
 }
 
 bool find_function(std::string value, vector<Type> paramTypes) {
@@ -155,7 +155,13 @@ statement: var_decl ';' {$$ = $1;}
 
 
 var_type: INTEGER {$$ = new Node; $$->type = Integer;}
-| ARRAY var_type arr_len {$$ = new Node; $$->type = Array; $$->code = $3->code; $$->name = $3->name;}
+| ARRAY var_type arr_len {
+    $$ = new Node; $$->type = Array; $$->code = $3->code; $$->name = $3->name;
+    if ($3->type == Array || find($3->name) == Array) {
+      printf("Arrays cannot be indexed by an array row: %d, col: %d\n", row, col);
+      exit(-1);
+    }
+  }
 ;
 
 arr_len: variable {$$ = $1;}
@@ -163,11 +169,22 @@ arr_len: variable {$$ = $1;}
 
 var_decl: var_type variable set_val { // Set type
   $$ = $1;
+  if (find($2->name) != -1) {
+    printf("Variable redeclaration at row: %d, col: %d\n", row, col);
+    exit(-1);
+  }
   if ($1->type == Array) {
     $$->code += ".[] " + $2->name + ", " + $1->name + "\n";
+    add_variable_to_symbol_table($2->name, $1->type);
   }
-  else {$$->code += ". " + $2->name + "\n";}
-  $$->code += $3->code;
+  else {
+    $$->code += ". " + $2->name + "\n";
+    add_variable_to_symbol_table($2->name, $1->type);
+  }
+  if (strlen($3->name.c_str()) != 0) {
+    $$->code += $3->code;
+    $$->code += "= " + $2->name + ", " + $3->name  + "\n";
+  }
 }
 ;
 
@@ -175,6 +192,18 @@ var_decl: var_type variable set_val { // Set type
 assignment: named_values set_val {
   Node* node = new Node;
   // node->code = ". " + string($1->name);
+  int found = find($1->name);
+
+  if (found == -1) {
+    printf("Variable %s does not exist in this scope at row: %d, col: %d\n", $1->name.c_str(), row, col);
+    exit(-1);
+  }
+
+  if (found != $1->type) {
+    printf("Variable %s type mismatch at row: %d, col: %d\n", $1->name.c_str(), row, col);
+    exit(-1);
+  }
+  
   if (strlen($2->name.c_str()) > 0) {
     node->code = $2->code;
     node->code += $1->code;
@@ -240,7 +269,10 @@ func_decl: func_temp '[' params ']' '{' statements '}' {
 ;
 
 func_temp: var_type FUNCTION variable {
-  if (find_function_name($3->name)) exit(-1);
+  if (find_function_name($3->name)) {
+    printf("Function of same name already exists, row: %d, col: %d\n", row, col);
+    exit(-1);
+  }
   add_function_to_symbol_table($3->name, $1->type);
   $$ = new Node;
   $$->code = "func " + $3->name + "\n";
@@ -258,7 +290,7 @@ params: params_temp ',' params {
 ;
 
 params_temp: var_type variable {
-  if (find($2->name)) {
+  if (find($2->name) != -1) {
     printf("Variable redeclaration at row: %d, col: %d\n", row, col);
     exit(-1);
   };
@@ -310,8 +342,15 @@ conditional: '>' {$$ = new Node; $$->name = ">";}
 ;
 
 io: READ variable {
+  int found = find($2->name);
+  if (found == -1) {
+    printf("Variable %s does not exist in this scope at row: %d, col: %d\n", $2->name.c_str(), row, col);
+    exit(-1);
+  }
   $$ = new Node;
   $$->code = string($2->code);
+  if ($2->type == Integer) $$->code += ".< " + string($2->name) + "\n";
+  else {$$->code += ".[]< " + $2->name + ", " + $2->index + "\n";}
   $$->code += ".< " + string($2->name) + "\n";
 }
 | WRITE exp {
@@ -332,6 +371,10 @@ return: RETURN exp {
 
 
 values: named_values {
+  if (find($1->name) == -1) {
+    printf("Variable %s does not exist in this scope at row: %d, col: %d\n", $1->name.c_str(), row, col);
+    exit(-1);
+  }
   $$ = $1;
   if ($1->type == Array) {
     $$->code += ". valtemp\n";
@@ -367,7 +410,6 @@ func_params: exp ',' func_params {
 | ')' {$$ = new Node; $$->code = "";} 
 ;
 func_params_temp: variable '(' func_params { // Check return types
-  print_symbol_table();
   $$ = new Node;
   $$->code = ". temp0\n";
   $$->code += $3->code;
