@@ -179,7 +179,6 @@ assignment: named_values set_val {
     node->code = $2->code;
     node->code += $1->code;
 
-//node->code += "named_values-type: " + typeof($1) + " " + "set_val: " + $2->name + "\n";
     if ($1->type == Array) {
       node->code += "[]= " + $1->name + ", " + $1->index + ", " + $2->name + "\n";
     }
@@ -281,10 +280,29 @@ params_temp: var_type variable {
 };
 
 
-
 loop: WHILE '[' conditions ']' '{' statements '}' {
-  Node* emp = new Node;
-  $$ = emp;
+  Node* node = new Node;
+  Node* loop = new Node;
+
+  loop->name = "loopbody0";
+  node->name = "beginloop0";
+  node->code = ": " + node->name + "\n";
+  
+  Node* cond = new Node;
+  cond = $3;
+
+  node->code += cond->code;
+  node->code += "?:= " + loop->name + ", " + cond->name + "\n"; 
+
+  node->code += ":= endloop0\n";
+  node->code += loop->name + " \n";
+
+  node->code += $6->code;
+
+  node->code += ":= beginloop0\n";
+  node->code += ": endloop0\n";
+
+  $$ = node;
 };
 
 conditions: condition { 
@@ -299,7 +317,22 @@ conditions: condition {
   $$ = emp;
 };
 
+condition: condition conditional exp {
+  Node* res = new Node;
 
+  res->name = "iftemp";
+  res->code += ". " + res->name + "\n";
+  res->code += $2->name + " " + res->name + ", " + $1->name + ", " + $3->name + "\n";
+  $$ = res;
+}
+| exp {
+  $$ = $1;
+}
+| '(' condition conditional exp ')' {
+  Node* emp = new Node;
+  $$ = emp;
+}
+;
 
 
 cond: IF '[' conditions ']' '{' statements '}' elseif {
@@ -330,6 +363,8 @@ cond: IF '[' conditions ']' '{' statements '}' elseif {
 }
 ;
 
+
+
 elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif {
   Node* emp = new Node;
   $$ = emp;
@@ -350,25 +385,6 @@ else: ELSE '{' statements '}' {
   $$ = emp;
 }
 ;
-
-condition: condition conditional exp {
-  Node* res = new Node;
-
-  res->name = "iftemp";
-  res->code += ". " + res->name + "\n";
-  res->code += $2->name + " " + res->name + ", " + $1->name + ", " + $3->name + "\n";
-  $$ = res;
-}
-| exp {
-  $$ = $1;
-}
-| '(' condition conditional exp ')' {
-  Node* emp = new Node;
-  $$ = emp;
-}
-;
-
-
 
 
 conditional: '>' {
