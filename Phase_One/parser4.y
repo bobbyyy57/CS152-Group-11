@@ -4,6 +4,8 @@ extern int yylex();
 
 #include <stdio.h>
 #include "Types.h"
+#include <sstream>
+#include <string>
 #include <string.h>
 
 extern FILE* yyin;
@@ -16,6 +18,14 @@ void yyerror(const char* msg) {
 char *identToken;
 int numberToken;
 int  count_names = 0;
+
+int temp_i = 0;
+int if_true_i = 0;
+int else_i = 0;
+int end_if_i = 0;
+int beginloop_i = 0;
+int loopbody_i = 0;
+int endloop_i = 0;
 
 using namespace std;
 
@@ -96,6 +106,41 @@ void print_symbol_table(void) {
   printf("--------------------\n");
 }
 
+
+std::string incrementer(std::string val) {
+  std::string new_val;
+  
+  if (val == "beginloop") {
+    new_val = std::string("beginloop") + to_string(beginloop_i) ;
+    beginloop_i++;
+  }
+  else if(val == "endloop"){
+    new_val = std::string("endloop") + to_string(endloop_i) ;
+    endloop_i++;
+  }
+  else if(val == "temp"){
+    new_val = std::string("temp") + to_string(temp_i) ;
+    temp_i++;
+  }
+  else if(val == "loopbody"){
+    new_val = std::string("loopbody") + to_string(loopbody_i) ;
+    loopbody_i++;
+  }
+  else if(val == "if_true"){
+    new_val = std::string("if_true") + to_string(if_true_i) ;
+    if_true_i++;
+  }
+  else if(val == "else"){
+    new_val = std::string("else") + to_string(else_i) ;
+    else_i++;
+  }
+  else if(val == "end_if"){
+    new_val = std::string("end_if") + to_string(end_if_i) ;
+    end_if_i++;
+  }
+
+  return new_val;
+}
 
 %}
 
@@ -283,9 +328,11 @@ params_temp: var_type variable {
 loop: WHILE '[' conditions ']' '{' statements '}' {
   Node* node = new Node;
   Node* loop = new Node;
+  Node* end = new Node;
 
-  loop->name = "loopbody0";
-  node->name = "beginloop0";
+  end->name = incrementer("endloop");
+  loop->name = incrementer("loopbody");
+  node->name = incrementer("beginloop");
   node->code = ": " + node->name + "\n";
   
   Node* cond = new Node;
@@ -294,13 +341,13 @@ loop: WHILE '[' conditions ']' '{' statements '}' {
   node->code += cond->code;
   node->code += "?:= " + loop->name + ", " + cond->name + "\n"; 
 
-  node->code += ":= endloop0\n";
-  node->code += loop->name + " \n";
+  node->code += ":= " + end->name + "\n";
+  node->code += ": " +loop->name + " \n";
 
   node->code += $6->code;
 
-  node->code += ":= beginloop0\n";
-  node->code += ": endloop0\n";
+  node->code += ":= " + node->name + "\n";
+  node->code += ": " + end->name + "\n";
 
   $$ = node;
 };
@@ -320,7 +367,7 @@ conditions: condition {
 condition: condition conditional exp {
   Node* res = new Node;
 
-  res->name = "iftemp";
+  res->name = incrementer("temp");
   res->code += ". " + res->name + "\n";
   res->code += $2->name + " " + res->name + ", " + $1->name + ", " + $3->name + "\n";
   $$ = res;
@@ -337,27 +384,32 @@ condition: condition conditional exp {
 
 cond: IF '[' conditions ']' '{' statements '}' elseif {
   Node* node = new Node;
+  Node* end = new Node;
   Node* cond = new Node;
   cond = $3;
+  Node* elseif = new Node;
+  elseif = $8;
+  end->name = incrementer("end_if");
 
-  node->name = "if_true0";
+  node->name = incrementer("if_true");
   node->code = cond->code;
   node->code += "?:= " + node->name + ", " + cond->name + "\n"; 
 
   if (strlen($8->name.c_str()) <= 0) { 
     node->code += ": " + node->name + "\n";
     node->code += $6->code;
-    node->code += ":= endif\n";
+    node->code += ":= " +end->name + "\n";
   }
   else {
-    node->code += ":= " + $8->name + "\n";
+    node->code += ":= " + elseif->name + "\n";
     node->code += ": " + node->name + "\n";
     node->code += $6->code;
-    node->code += ":= endif\n";
+    node->code += ":= "+ end->name +"\n";
+    node->code += ": " + elseif->name + "\n";
     node->code += $8->code;
   }
 
-  node->code += ": endif\n";
+  node->code += ": " + end->name +"\n";
 
   $$ = node;
 }
@@ -376,7 +428,7 @@ elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif {
 
 else: ELSE '{' statements '}' {
   Node* node = new Node;
-  node->name = "else0";
+  node->name = incrementer("else");
   node->code = $3->code;
   $$ = node;
 }
