@@ -1,0 +1,16 @@
+:1234::symbols:main[]{
+:1234: a; 
+:1234: b; 
+:1234: c; 
+
+a :point_right: :one: :zero: :zero:;
+b :point_right: :five: :zero:;
+:keyboard: n;
+:vertical_traffic_light:[ a :arrow_backward: b ]{
+    c :point_right: b;
+}
+:traffic_light:{
+    c :point_right: a;
+}
+:athletic_shoe: c;
+}
