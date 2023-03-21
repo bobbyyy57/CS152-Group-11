@@ -3,8 +3,8 @@
 :1234: b; 
 :1234: c; 
 
-a :point_right: :one: :zero: :zero:;
-b :point_right: :five: :zero:;
+a :point_right: :one::zero::zero:;
+b :point_right: :five::zero:;
 :keyboard: n;
 :vertical_traffic_light:[ a :arrow_backward: b ]{
     c :point_right: b;
