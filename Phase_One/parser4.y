@@ -4,7 +4,6 @@ extern int yylex();
 
 #include <stdio.h>
 #include "Types.h"
-#include <sstream>
 #include <string>
 #include <string.h>
 
@@ -38,6 +37,7 @@ struct Function {
   std::vector<Symbol> declarations;
   std::vector<Type> params;
   Type return_type;
+  vector<string> while_ends;
 };
 
 std::vector <Function> symbol_table;
@@ -142,6 +142,11 @@ std::string incrementer(std::string val) {
   return new_val;
 }
 
+int currtemp = 0;
+string newtemp() {
+  return "temp" + to_string(currtemp++);
+}
+
 %}
 
 %union {
@@ -153,7 +158,7 @@ std::string incrementer(std::string val) {
 %token <name>
     INTEGER STRING ARRAY FUNCTION IF ELSE
     WHILE READ WRITE ELSEIF GTE LTE ISEQ NOTEQ
-    AND OR RETURN VAR
+    AND OR RETURN VAR BREAK
 
 %token <name> INT
 
@@ -164,6 +169,7 @@ std::string incrementer(std::string val) {
     elseif else conditions condition conditional 
     array func_params index arr_vals named_values
     params_temp func_params_temp
+    w_start w_body w_end break
 
 %start start
 %define parse.error verbose
@@ -175,8 +181,12 @@ std::string incrementer(std::string val) {
 start: func_decl {
   $$ = $1;
   // print_symbol_table();
+  if (!find_function_name("main")) {
+    printf("No function main found\n");
+    exit(-1);
+  }
   printf("%s", $$->code.c_str());}
-| /*empty*/ {Node* node = new Node; node->name = node->code = ""; $$ = node;}
+| /*empty*/ {$$= new Node;}
 ;
 
 statements: statement statements {
@@ -196,8 +206,18 @@ statement: var_decl ';' {$$ = $1;}
 | func_params_temp ';' {
     $$ = $1;
   }
+| break ';' {$$ = $1;}
 ;
 
+break: BREAK {
+  if (get_function()->while_ends.size() == 0) {
+    printf("Break outside of loop row: %d, col: %d\n", row, col);
+    exit(-1);
+  }
+
+  $$ = new Node;
+  $$->code = ":= " + get_function()->while_ends[get_function()->while_ends.size() - 1] + "\n";
+}
 
 var_type: INTEGER {$$ = new Node; $$->type = Integer;}
 | ARRAY var_type arr_len {$$ = new Node; $$->type = Array; $$->code = $3->code; $$->name = $3->name;}
@@ -213,6 +233,14 @@ var_decl: var_type variable set_val { // Set type
   }
   else {$$->code += ". " + $2->name + "\n";}
   $$->code += $3->code;
+  if (strlen($3->name.c_str()) > 0) {
+    if ($1->type == Array) {
+      $$->code += "[]= " + $2->name + ", " + $2->index + ", " + $3->name + "\n";
+    }
+    else {
+      $$->code += "= " + $2->name + ", " + $3->name + "\n";
+    }
+  }
 }
 ;
 
@@ -243,7 +271,7 @@ set_val: '=' exp {
 
 exp: exp as mult { // Type checking
   Node* res = new Node;
-  res->name="addtemp";
+  res->name = newtemp();
   res->code = $3->code;
   res->code += $1->code;
   res->code += ". " + res->name + " \n";	
@@ -256,10 +284,10 @@ exp: exp as mult { // Type checking
 
 mult: mult md factor {
   Node* res = new Node;
-  res->name="multtemp";
+  res->name = newtemp();
   res->code = $3->code;
   res->code += $1->code;
-  res->code += ". multtemp\n";
+  res->code += ". " + res->name + " \n";	
   res->code += $2->name + " " + res->name + ", " + $1->name + ", " + $3->name + " \n";
   $$ = res;
 }
@@ -325,18 +353,18 @@ params_temp: var_type variable {
 };
 
 
-loop: WHILE '[' conditions ']' '{' statements '}' {
+loop: WHILE w_start w_body w_end '[' conditions ']' '{' statements '}' {
   Node* node = new Node;
   Node* loop = new Node;
   Node* end = new Node;
 
-  end->name = incrementer("endloop");
-  loop->name = incrementer("loopbody");
-  node->name = incrementer("beginloop");
+  end->name = $4->name;
+  loop->name = $3->name;
+  node->name = $2->name;
   node->code = ": " + node->name + "\n";
   
   Node* cond = new Node;
-  cond = $3;
+  cond = $6;
 
   node->code += cond->code;
   node->code += "?:= " + loop->name + ", " + cond->name + "\n"; 
@@ -344,13 +372,22 @@ loop: WHILE '[' conditions ']' '{' statements '}' {
   node->code += ":= " + end->name + "\n";
   node->code += ": " +loop->name + " \n";
 
-  node->code += $6->code;
+  node->code += $9->code;
 
   node->code += ":= " + node->name + "\n";
   node->code += ": " + end->name + "\n";
 
   $$ = node;
+  get_function()->while_ends.pop_back();
 };
+
+w_start: {$$ = new Node; $$->name = incrementer("beginloop");};
+w_body: {$$ = new Node; $$->name = incrementer("loopbody");};
+w_end: {
+  $$ = new Node; $$->name = incrementer("endloop");
+  get_function()->while_ends.push_back($$->name);
+};
+
 
 conditions: condition { 
   $$ = $1;
@@ -385,10 +422,8 @@ condition: condition conditional exp {
 cond: IF '[' conditions ']' '{' statements '}' elseif {
   Node* node = new Node;
   Node* end = new Node;
-  Node* cond = new Node;
-  cond = $3;
-  Node* elseif = new Node;
-  elseif = $8;
+  Node* cond = $3;
+  Node* elseif = $8;
   end->name = incrementer("end_if");
 
   node->name = incrementer("if_true");
@@ -396,6 +431,7 @@ cond: IF '[' conditions ']' '{' statements '}' elseif {
   node->code += "?:= " + node->name + ", " + cond->name + "\n"; 
 
   if (strlen($8->name.c_str()) <= 0) { 
+    node->code += ":= " + end->name + "\n";
     node->code += ": " + node->name + "\n";
     node->code += $6->code;
     node->code += ":= " +end->name + "\n";
@@ -418,8 +454,7 @@ cond: IF '[' conditions ']' '{' statements '}' elseif {
 
 
 elseif: ELSEIF '[' conditions ']' '{' statements '}' elseif {
-  Node* emp = new Node;
-  $$ = emp;
+  $$ = new Node;
 }
 | else {
   $$ = $1;
@@ -433,8 +468,7 @@ else: ELSE '{' statements '}' {
   $$ = node;
 }
 | /*empty*/ {
-  Node* emp = new Node;
-  $$ = emp;
+  $$ = new Node;
 }
 ;
 
@@ -490,9 +524,9 @@ return: RETURN exp {
 values: named_values {
   $$ = $1;
   if ($1->type == Array) {
-    $$->code += ". valtemp\n";
-    $$->code += "=[] valtemp, " + $1->name + ", " + $1->index + "\n";
-    $$->name = "valtemp";
+    $$->name = newtemp();
+    $$->code += ". " + $$->name + "\n";
+    $$->code += "=[] " + $$->name + ", " + $1->name + ", " + $1->index + "\n";
     $$->type = Integer;
   }
 }
@@ -523,12 +557,12 @@ func_params: exp ',' func_params {
 | ')' {$$ = new Node; $$->code = "";} 
 ;
 func_params_temp: variable '(' func_params { // Check return types
-  print_symbol_table();
+  // print_symbol_table();
   $$ = new Node;
-  $$->code = ". temp0\n";
+  $$->name = newtemp();
+  $$->code = ". " + $$->name + "\n";
   $$->code += $3->code;
-  $$->code += "call " + $1->name + ", temp0\n";
-  $$->name = "temp0";
+  $$->code += "call " + $1->name + ", " + $$->name + "\n";
   if (!find_function($1->name, $3->paramTypes)) {
     printf("No valid function with provided parameters row: %d, col: %d\n", row, col);
     exit(-1);

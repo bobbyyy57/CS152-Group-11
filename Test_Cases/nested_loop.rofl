@@ -1,0 +1,12 @@
+:1234::symbols:main[]{
+    :1234: i :point_right: :zero:;
+    :1234: j;
+    :repeat: [i :arrow_backward: :two:] {
+        j :point_right: :one:;
+        :repeat: [j :arrow_backward::point_right: :three:] {
+            :desktop_computer: j;
+            j :point_right: j :heavy_plus_sign: :one:;
+        }
+        i :point_right: i :heavy_plus_sign: :one:;
+    }
+}

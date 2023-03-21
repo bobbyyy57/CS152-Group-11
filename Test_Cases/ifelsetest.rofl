@@ -1,17 +1,17 @@
-:1234::symbols:x[]{
+:1234::symbols:main[]{
 :1234: one :point_right: :one:;
 :1234: two :point_right: :two:;
 :1234: three :point_right: :three:;
+:1234: n;
 
 :keyboard: n;
 :vertical_traffic_light:[ n :arrow_backward::point_right: :one::zero::zero:]{
     :desktop_computer: one; 
 }
-:traffic_light::vertical_traffic_light:[n :arrow_backward::point_right: :two::zero::zero:]{
+:vertical_traffic_light::traffic_light:[n :arrow_backward::point_right: :two::zero::zero:]{
     :desktop_computer: two; 
 }
 :traffic_light: {
     :desktop_computer: three; 
 }
-:athletic_shoe: n;
 }

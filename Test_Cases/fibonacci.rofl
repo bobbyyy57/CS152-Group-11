@@ -9,7 +9,7 @@
 :1234: n;
 :1234: fibn;
 
-:desktop_computer: n;
+:keyboard: n;
 fibn :point_right: fibonacci(n);
-:keyboard: fibn;
+:desktop_computer: fibn;
 }

@@ -66,6 +66,7 @@ NUM [0-9]
 ":chains:"			{col+=strlen(yytext); return AND;}
 ":question:"			{col+=strlen(yytext); return OR;}
 ":athletic_shoe:"		{col+=strlen(yytext); return RETURN;}
+":skull:"				{col+=strlen(yytext); return BREAK;}
 
 .								{printf("ERROR: unrecognized token, row %d, col%d\n", row, col); return -1;}
 
