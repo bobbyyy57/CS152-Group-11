@@ -53,6 +53,7 @@
 | `:pencil1:`| ✏️| COMMENT|
 | `:keyboard:` | ⌨️ | WRITE |
 | `:athletic_shoe:` | :athletic_shoe: | RETURN |
+| `:skull:` | :skull: | BREAK |
 | `{` | { | LEFT_CURLY |
 | `}` | } | RIGHT_CURLY |
 | `[` | [ | LEFT_SQUARE |
