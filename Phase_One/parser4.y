@@ -269,7 +269,7 @@ set_val: '=' exp {
 | /*empty*/ {$$ = new Node;}
 ;
 
-exp: exp as mult { // Type checking
+exp: exp as mult {
   Node* res = new Node;
   res->name = newtemp();
   res->code = $3->code;
@@ -294,7 +294,7 @@ mult: mult md factor {
 | factor {$$ = $1;}
 ;
 
-factor: p {$$ = $1;} // Uhh figure this out?
+factor: p {$$ = $1;}
 | values {$$ = $1;}
 ;
 
@@ -556,7 +556,7 @@ func_params: exp ',' func_params {
 }
 | ')' {$$ = new Node; $$->code = "";} 
 ;
-func_params_temp: variable '(' func_params { // Check return types
+func_params_temp: variable '(' func_params {
   // print_symbol_table();
   $$ = new Node;
   $$->name = newtemp();
@@ -605,6 +605,5 @@ int main(int argc, char *argv[]) {
     else yyin = stdin;
 
     yyparse();
-    //printf("s\n", $$);
     return 0;
 }
